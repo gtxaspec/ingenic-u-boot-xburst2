@@ -663,10 +663,7 @@ if (disable_sd != NULL && strcmp(disable_sd, "false") == 0) {
 
 int checkboard(void)
 {
-	char output[100];
-	puts("Platform: ISVP (Ingenic XBurst1)\n");
-	sprintf(output, "Built profile: %s\n", SOC_VAR);
-	puts(output);
+	printf("Platform: ISVP (Ingenic XBurst2)\nBuilt profile: %s\n", SOC_VAR);
 
 	debug_socinfo = 0;
 	do_socinfo(NULL, 0, 0, NULL);
