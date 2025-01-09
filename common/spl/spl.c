@@ -282,31 +282,8 @@ void preloader_console_init(void)
 	gd->have_console = 1;
 
 #if !defined(CONFIG_FAST_BOOT) && !defined (CONFIG_SIMULATION) && !defined(CONFIG_YMODEM_NO_PRINTF)
-	puts("\n\nIngenic U-Boot Flex " SOC_VAR " SPL " PLAIN_VERSION " (" U_BOOT_DATE " - " \
+	puts("\n\nThingino U-Boot for Ingenic " SOC_VAR " SPL " PLAIN_VERSION " (" U_BOOT_DATE " - " \
 			U_BOOT_TIME ")\n");
-#endif
-#ifndef CONFIG_UART_LOAD
-	chip = *((volatile unsigned int *)(0xb3540250));
-    chip = chip >> 16;
-    if(0x1111 == chip) {
-        puts("Board info: T41N\n");
-    } else if(0x3333 == chip) {
-        puts("Board info: T41L\n");
-    } else if(0x5555 == chip) {
-        puts("Board info: T41ZL\n");
-    } else if(0x7777 == chip) {
-        puts("Board info: T41ZN\n");
-    } else if(0x6666 == chip) {
-        puts("Board info: T41ZX\n");
-    } else if(0x4444 == chip) {
-        puts("Board info: T41A\n");
-    } else if(0x9999 == chip) {
-        puts("Board info: T41LQ\n");
-    } else if(0xAAAA == chip) {
-        puts("Board info: T41NQ\n");
-    } else {
-        puts("Board info: not support\n");
-    }
 #endif
 #ifdef CONFIG_SPL_DISPLAY_PRINT
 	spl_display_print();
