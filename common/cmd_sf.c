@@ -150,6 +150,11 @@ static int do_spi_flash_probe(int argc, char * const argv[],unsigned char sfc_in
 	return 0;
 }
 
+/* Get the current SPI flash device instance, provide external access */
+struct spi_flash *get_flash(void) {
+    return flash0;
+}
+
 /**
  * Write a block of data to SPI flash, first checking if it is different from
  * what is already there.
