@@ -657,7 +657,9 @@
 #define CONFIG_AUTO_UPDATE
 #define CONFIG_CMD_SDUPDATE
 #define CONFIG_CMD_SOC_INFO
-
+#define CONFIG_CMD_ETHADDR
+#define CONFIG_CMD_FACTORY
+#define CONFIG_CMD_JZNET
 
 /* these cause a hang when booting from MMC - until we fix MMC env*/
 #ifndef CONFIG_ENV_IS_IN_MMC
@@ -934,7 +936,7 @@
 #if defined(CONFIG_SPL_MMC_SUPPORT)
 #define CONFIG_BOOTCOMMAND \
 "setenv setargs setenv bootargs ${bootargs};run setargs;" \
-"mmc rescan;mmc read ${baseaddr} 0x1800 0x3000;" \
+"mmc rescan;fatload mmc 0:1 ${baseaddr} uImage;" \
 "bootm ${baseaddr};"
 #elif defined(CONFIG_SFC_NOR)
 #define CONFIG_BOOTCOMMAND \
@@ -953,17 +955,22 @@
 "bootm ${baseaddr};"
 #endif
 
+#if defined(CONFIG_SPL_MMC_SUPPORT)
+#define ROOTFS_CONFIG " root=/dev/mmcblk0p2 rootfstype=ext4 rw rootwait init=/init"
+#else
+#define ROOTFS_CONFIG " root=/dev/mtdblock3 rootfstype=squashfs init=/init"
+#endif
+
 #define CONFIG_BOOTARGS \
 BOOTARGS_COMMON \
-" console=\\${serialport},\\${baudrate}n8" \
-" panic=\\${panic_timeout} root=/dev/mtdblock3 rootfstype=squashfs init=/init" \
+" console=\\${serialport},\\${baudrate}n8 panic=\\${panic_timeout}" \
+ROOTFS_CONFIG \
 " mtdparts=jz_sfc:256k(boot),64k(env),\\${kern_size}(kernel),\\${rootfs_size}(rootfs),-(rootfs_data)\\${update}"
 
 #define CONFIG_EXTRA_ENV_SETTINGS \
 "baseaddr=0x80600000\0" \
 "panic_timeout=10\0" \
 "serialport=ttyS1\0" \
-"restore=n\0" \
 "disable_eth=false\0" \
 "disable_sd=false\0" \
 "enable_updates=false\0" \
