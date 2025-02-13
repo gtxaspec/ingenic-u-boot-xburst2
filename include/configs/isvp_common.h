@@ -498,7 +498,7 @@
  * Boot command definitions.
  */
 #define CONFIG_FAT_WRITE
-#define CONFIG_BOOTDELAY 3
+#define CONFIG_BOOTDELAY 1
 
 /**
  * Drivers configuration.
