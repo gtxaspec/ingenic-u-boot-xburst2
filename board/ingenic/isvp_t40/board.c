@@ -33,6 +33,7 @@
 #include <power/d2041_core.h>
 
 extern int jz_net_initialize(bd_t *bis);
+
 struct cgu_clk_src cgu_clk_src[] = {
 	{EL150, APLL},
 	{MACPHY, MPLL},
