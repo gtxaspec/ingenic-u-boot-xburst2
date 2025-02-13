@@ -25,6 +25,7 @@ pick_a_soc() {
 		"isvp_t40xp_sfcnor"		"Ingenic T40XP"		\
 		"isvp_t40xp_msc0"		"Ingenic T40XP MSC0"		\
 		"isvp_t40n_msc0"		"Ingenic T40N MSC0"		\
+		"isvp_t40xp_sfcnand"		"Ingenic T40XP NAND"		\
 		--notags 3>&1 1>&2 2>&3)
 }
 
