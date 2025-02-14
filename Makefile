@@ -1,30 +1,10 @@
-#
-# (C) Copyright 2000-2012
-# Wolfgang Denk, DENX Software Engineering, wd@denx.de.
-#
-# See file CREDITS for list of people who contributed to this
-# project.
-#
-# This program is free software; you can redistribute it and/or
-# modify it under the terms of the GNU General Public License as
-# published by the Free Software Foundatio; either version 2 of
-# the License, or (at your option) any later version.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with this program; if not, write to the Free Software
-# Foundation, Inc., 59 Temple Place, Suite 330, Boston,
-# MA 02111-1307 USA
-#
+# SPDX-License-Identifier: GPL-2.0+
 
 VERSION = 2013
 PATCHLEVEL = 07
 SUBLEVEL =
 EXTRAVERSION =
+
 ifneq "$(SUBLEVEL)" ""
 U_BOOT_VERSION = $(VERSION).$(PATCHLEVEL).$(SUBLEVEL)$(EXTRAVERSION)
 else
@@ -620,7 +600,7 @@ $(obj)u-boot-with-spl-mbr.bin: $(obj)u-boot-with-spl.bin
 ifeq ($(CONFIG_SPL_PARAMS_FIXER),y)
 $(obj)u-boot-with-spl-mbr-gpt.bin: $(obj)u-boot-with-spl.bin $(obj)spl/u-boot-spl.bin
 		cat $(obj)tools/ingenic-tools/mbr-gpt.bin $(obj)u-boot-with-spl.bin > $@
-		#$(obj)tools/ingenic-tools/spl_params_fixer $@ $(obj)spl/u-boot-spl.bin 0 256 > /dev/null
+		$(obj)tools/ingenic-tools/spl_params_fixer $@ $(obj)spl/u-boot-spl.bin 0 256 > /dev/null
 $(obj)u-boot-lzo-with-spl-mbr-gpt.bin: $(obj)u-boot-lzo-with-spl.bin
 		cat $(obj)tools/ingenic-tools/mbr-gpt.bin $(obj)u-boot-lzo-with-spl.bin > $@
 		$(obj)tools/ingenic-tools/spl_params_fixer $@ $(obj)spl/u-boot-spl.bin 0 256 > /dev/null
@@ -834,7 +814,7 @@ $(VERSION_FILE):
 		@( localvers='$(shell $(TOPDIR)/tools/setlocalversion $(TOPDIR))' ; \
 		   printf '#define PLAIN_VERSION "%s%s"\n' \
 			"$(U_BOOT_VERSION)" "$${localvers}" ; \
-		   printf '#define U_BOOT_VERSION "Ingenic U-Boot Flex %s%s"\n' \
+		   printf '#define U_BOOT_VERSION "Thingino U-Boot for Ingenic %s%s"\n' \
 			"$(U_BOOT_VERSION)" "$${localvers}" ; \
 		) > $@.tmp
 		@( printf '#define CC_VERSION_STRING "%s"\n' \
@@ -846,7 +826,7 @@ $(VERSION_FILE):
 $(TIMESTAMP_FILE):
 		@mkdir -p $(dir $(TIMESTAMP_FILE))
 		@LC_ALL=C date +'#define U_BOOT_DATE "%b %d %C%y"' > $@.tmp
-		@LC_ALL=C date +'#define U_BOOT_TIME "%T"' >> $@.tmp
+		@LC_ALL=C date +'#define U_BOOT_TIME "%T %Z"' >> $@.tmp
 		@cmp -s $@ $@.tmp && rm -f $@.tmp || mv -f $@.tmp $@
 
 easylogo env gdb:
