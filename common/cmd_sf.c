@@ -550,6 +550,17 @@ static int do_spi_flash0(cmd_tbl_t *cmdtp, int flag, int argc, char * const argv
 	if (strcmp(cmd, "probe") == 0) {
 		ret = do_spi_flash_probe(argc, argv,SFC_0);
 		goto done;
+	} else if (strcmp(cmd, "probe-alt") == 0) {
+		ret = do_spi_flash_probe(argc, argv,SFC_0);
+		/* Grab flash chip size and save it */
+		char flashlen_str[32], flashsize_str[32];
+		int64_t flashsize = flash0->size;
+		sprintf(flashlen_str, "%llx", flashsize);
+		setenv("flash_len", flashlen_str);
+		sprintf(flashsize_str, "%lluk", flashsize / 1024);
+		setenv("flash_size", flashsize_str);
+		printf("SF:    flash_size env set to %s\n", flashsize_str);
+		goto done;
 	}
 
 	/* The remaining commands require a selected device */
