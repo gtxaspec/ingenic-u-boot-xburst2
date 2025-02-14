@@ -618,7 +618,9 @@ struct spi_flash *spi_flash_probe(unsigned char sfc_index,unsigned int bus, unsi
 
 #ifndef CONFIG_BURNER
 #ifndef CONFIG_FAST_BOOT
-    printf("SF: Detected %s, flash size: %dMB, manufacturer id: %02x\n", flash->name, flash->size/1024/1024, *idp);
+	/* printf("SF: Detected %s, flash size: %dMB, manufacturer id: %02x\n", flash->name, flash->size/1024/1024, *idp); */
+	printf("SF:    Detected %s %dMB (%02x %02x %02x %02x %02x)",
+		flash->name, flash->size/1024/1024, idcode[0], idcode[1], idcode[2], idcode[3], idcode[4]);
 #endif
 #endif
 
