@@ -946,6 +946,12 @@ int sfc_nor_init(unsigned int idcode)
 
 		int i = 0;
 
+		if (idcode == 0 || idcode == 0xff) {
+				printf("JZSFC: Invalid ID: %x\n", idcode);
+				return -1;
+		}
+		printf("JZSFC: Flash chip ID: %x\n", idcode);
+
 		for (i = 0; i < ARRAY_SIZE(jz_spi_support_table); i++) {
 			gparams = jz_spi_support_table[i];
 			if (gparams.id_manufactory == idcode){
