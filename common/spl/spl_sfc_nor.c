@@ -222,6 +222,8 @@ void spl_sfc_nor_load_image(void)
 
 	header = (struct image_header *)(CONFIG_UBOOT_OFFSET);
 
+	sfc_init();
+
 	spl_parse_image_header(header);
 
 	sfc_nor_load(CONFIG_UBOOT_OFFSET, spl_image.size, CONFIG_DECMP_BUFFER_ADRS);
