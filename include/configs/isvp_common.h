@@ -22,9 +22,54 @@
  * MA 02111-1307 USA
  */
 
-#ifndef __CONFIG_ISVP_T41_H__
-#define __CONFIG_ISVP_T41_H__
+ #ifndef __CONFIG_ISVP_COMMON_H__
+ #define __CONFIG_ISVP_COMMON_H__
 
+#if defined(__CONFIG_ISVP_T41_H__)
+#define CONFIG_T41
+#define CONFIG_SOC "t41"
+#else
+#error please define ISVP config
+#endif
+
+#define T41N "T41N"
+#define T41NQ "T41NQ"
+#define T41L "T41L"
+#define T41LQ "T41LQ"
+#define T41A "T41A"
+#define T41ZL "T41ZL"
+#define T41ZN "T41ZN"
+#define T41ZX "T41XZ"
+#define T41XQ "T41XQ"
+
+#if defined(CONFIG_T41N)
+#define SOC_VAR T41N
+#define CONFIG_DDR_128M
+#elif defined(CONFIG_T41NQ)
+#define SOC_VAR T41NQ
+#define CONFIG_DDR_128M
+#elif defined(CONFIG_T41L)
+#define SOC_VAR T41L
+#define CONFIG_DDR_64M
+#elif defined(CONFIG_T41LQ)
+#define SOC_VAR T41LQ
+#define CONFIG_DDR_64M
+#elif defined(CONFIG_T41A)
+#define SOC_VAR T41A
+#define CONFIG_DDR_128M
+#elif defined(CONFIG_T41ZL)
+#define SOC_VAR T41ZL
+#define CONFIG_DDR_64M
+#elif defined(CONFIG_T41ZN)
+#define SOC_VAR T41ZN
+#define CONFIG_DDR_128M
+#elif defined(CONFIG_T41ZX)
+#define SOC_VAR T41ZX
+#define CONFIG_DDR_256M
+#elif defined(CONFIG_T41XQ)
+#define SOC_VAR T41XQ
+#define CONFIG_DDR_256M
+#endif
 
 /**
  * Basic configuration(SOC, Cache, Stack, UART, DDR).
@@ -473,18 +518,6 @@
 #define IMAGE_ENABLE_OF_LIBFDT	1
 #define CONFIG_LMB
 #endif
-/**
- * Boot arguments definitions.
- */
-#if defined(CONFIG_T41N) || defined(CONFIG_T41NQ)
-#define BOOTARGS_COMMON "console=ttyS1,115200n8 mem=48M@0x0 rmem=64M@0x3000000 nmem=16M@0x7000000"
-#elif defined(CONFIG_T41L) || defined(CONFIG_T41LQ)
-#define BOOTARGS_COMMON "console=ttyS1,115200n8 mem=32M@0x0 rmem=32M@0x2000000"
-#elif defined(CONFIG_T41A) || defined(CONFIG_T41ZX) || defined(CONFIG_T41XQ)
-#define BOOTARGS_COMMON "console=ttyS1,115200n8 mem=100M@0x0 rmem=128M@0x6400000 nmem=28M@0xE400000"
-#else
-#define BOOTARGS_COMMON "console=ttyS1,115200n8 mem=64M@0x0 rmem=64M@0x4000000"
-#endif
 
 #if defined(CONFIG_SPL_SFC_NOR) || defined(CONFIG_SPL_SFC_NAND)
 #define CDT_OFF	1 /*1:not use CDT;0:use CDT*/
@@ -496,6 +529,7 @@
 #else
 #define CONFIG_JZ_SFC_CDT
 #endif /* endif CDT_OFF */
+
 #define CONFIG_SPL_PAD_TO_BLOCK
 #define CONFIG_SPL_VERSION     1
 #ifdef CONFIG_SPL_SFC_NOR
@@ -507,52 +541,11 @@
 #endif /* defined CONFIG_SPL_SFC_NOR */
 #endif /* defined(CONFIG_SPL_SFC_NOR) || defined(CONFIG_SPL_SFC_NAND) */
 
-#ifdef CONFIG_FAST_BOOT
-#ifdef CONFIG_SPL_MMC_SUPPORT
-	#define CONFIG_BOOTARGS BOOTARGS_COMMON " init=/linuxrc root=/dev/mmcblk0p2 rw rootdelay=1"
-#elif defined(CONFIG_SFC_NOR)
-#ifdef CONFIG_OF_LIBFDT
-	#define CONFIG_BOOTARGS BOOTARGS_COMMON " init=/linuxrc rootfstype=squashfs root=/dev/mtdblock2 rw mtdparts=sfc0_nor:256k(boot),2560k(kernel),2048k(root),64k(dtb),-(appfs) lpj=11968512 quiet"
-#else
-	#define CONFIG_BOOTARGS BOOTARGS_COMMON " init=/linuxrc rootfstype=squashfs root=/dev/mtdblock2 rw mtdparts=sfc0_nor:256k(boot),2560k(kernel),2048k(root),-(appfs) lpj=11968512 quiet"
-#endif
-#elif defined(CONFIG_SFC_NAND)
-	#define CONFIG_BOOTARGS BOOTARGS_COMMON " init=/linuxrc ubi.mtd=2 root=ubi0:rootfs rootfstype=ubifs rw mtdparts=sfc0_nand:1M(uboot),3M(kernel),20M(root),-(appfs) lpj=11968512 quiet"
-#endif
-#else
-#ifdef CONFIG_SPL_MMC_SUPPORT
-	#define CONFIG_BOOTARGS BOOTARGS_COMMON " init=/linuxrc root=/dev/mmcblk0p2 rw rootdelay=1"
-#elif defined(CONFIG_SFC_NOR)
-#ifdef CONFIG_OF_LIBFDT
-	#define CONFIG_BOOTARGS BOOTARGS_COMMON " init=/linuxrc rootfstype=squashfs root=/dev/mtdblock2 rw mtdparts=sfc0_nor:256k(boot),2560k(kernel),2048k(root),64k(dtb),-(appfs) lpj=11968512"
-#else
-	#define CONFIG_BOOTARGS BOOTARGS_COMMON " init=/linuxrc rootfstype=squashfs root=/dev/mtdblock2 rw mtdparts=sfc0_nor:256k(boot),2560k(kernel),2048k(root),-(appfs) lpj=11968512"
-#endif
-#elif defined(CONFIG_SFC_NAND)
-	#define CONFIG_BOOTARGS BOOTARGS_COMMON " init=/linuxrc ubi.mtd=2 root=ubi0:rootfs rootfstype=ubifs rw mtdparts=sfc0_nand:1M(uboot),3M(kernel),20M(root),-(appfs) lpj=11968512"
-#endif
-#endif
-
-/**
- * Boot command definitions.
- */
+#define CONFIG_U_BOOT_BUILD_NAME	"thingino_" SOC_VAR
+#define CONFIG_AUTOBOOT_KEYED
+#define CONFIG_AUTOBOOT_PROMPT		"KEY:   ###### Press Ctrl-C now to interrupt boot... loading in %ds ######\n"
+#define CONFIG_AUTOBOOT_STOP_STR	"\x3"
 #define CONFIG_BOOTDELAY 1
-
-#ifdef CONFIG_SPL_MMC_SUPPORT
-#define CONFIG_BOOTCOMMAND "mmc read 0x80600000 0x1800 0x3000; bootm 0x80600000"
-#endif  /* CONFIG_SPL_MMC_SUPPORT */
-
-#ifdef CONFIG_SFC_NOR
-#ifdef CONFIG_OF_LIBFDT
-	#define CONFIG_BOOTCOMMAND "sf0 probe;sf0 read 0x80600000 0x40000 0x280000;sf0 read 0x83000000 0x540000 0x10000;bootm 0x80600000 - 0x83000000"
-#else
-	#define CONFIG_BOOTCOMMAND "sf0 probe;sf0 read 0x80600000 0x40000 0x280000;bootm 0x80600000"
-#endif
-#endif /* CONFIG_SFC_NOR */
-
-#ifdef CONFIG_SFC_NAND
-	#define CONFIG_BOOTCOMMAND "nand read 0x80600000 0x100000 0x300000;bootm 0x80600000"
-#endif /* CONFIG_SFC_NAND */
 
 /**
  * Drivers configuration.
@@ -588,13 +581,12 @@
 
 /* SFC */
 #ifdef CONFIG_SFC_NOR_COMMAND
-#define CONFIG_SFC_MIN_ALIGN			0x1000	/*0x1000->4K Erase,0x8000->32k 0x10000->64k*/
+#define CONFIG_SFC_MIN_ALIGN			0x8000	/*0x1000->4K Erase,0x8000->32k 0x10000->64k*/
 #define CONFIG_CMD_SF
 #define CONFIG_SPI_FLASH
 #define CONFIG_JZ_SFC
 #define CONFIG_SFC_NOR
 #define CONFIG_SPI_FLASH_INGENIC
-#define CONFIG_CMD_TFTPDOWNLOAD			1	/* tftpdownload support */
 /*#define CONFIG_SPI_QUAD*/				/* set nor quad mode,default:Standard mode */
 #endif /* CONFIG_SFC_NOR_COMMAND */
 
@@ -660,12 +652,11 @@
 #define CONFIG_GPIO_PHY_RESET	GPIO_PB(28)
 #define CONFIG_GPIO_PHY_RESET_ENLEVEL	0
 
-/* DEBUG ETHERNET */
-#define CONFIG_SERVERIP		10.3.2.2
-#define CONFIG_IPADDR		10.3.20.151
-#define CONFIG_GATEWAYIP	10.3.20.1
-#define CONFIG_NETMASK		255.255.255.0
-#define CONFIG_ETHADDR		00:11:22:56:96:69
+#define CONFIG_NETMASK			255.255.255.0
+#define CONFIG_GATEWAYIP		192.168.1.1
+#define CONFIG_SERVERIP			192.168.1.254
+#define CONFIG_IPADDR			192.168.1.10
+#define CONFIG_RANDOM_MACADDR
 
 /* GPIO */
 #define CONFIG_JZ_GPIO
@@ -676,32 +667,55 @@
 /**
  * Command configuration.
  */
-#define CONFIG_CMD_WATCHDOG	/* watchdog support */
-#define CONFIG_CMD_NET		/* networking support			*/
-#define CONFIG_CMD_PING
-#define CONFIG_CMD_BOOTD	/* bootd			*/
-#define CONFIG_CMD_SAVEENV	/* saveenv			*/
-#define CONFIG_CMD_CONSOLE	/* coninfo			*/
-#define CONFIG_CMD_ECHO		/* echo arguments		*/
-#define CONFIG_CMD_FAT		/* FAT support			*/
-/*#define CONFIG_CMD_L2CACHE*/	/* allcate l2cache support */
-/*#define CONFIG_CMD_JFFS2*/	/* JFFS2 support        */
-#define CONFIG_CMD_LOADB	/* loadb			*/
-#define CONFIG_CMD_LOADS	/* loads			*/
-#define CONFIG_CMD_MEMORY	/* md mm nm mw cp cmp crc base loop mtest */
-#define CONFIG_CMD_MISC		/* Misc functions like sleep etc*/
-#define CONFIG_CMD_MMC		/* MMC/SD support			*/
-#define CONFIG_CMD_RUN		/* run command in env variable	*/
-#define CONFIG_CMD_SOURCE	/* "source" command support	*/
-#define CONFIG_CMD_GETTIME
-#define CONFIG_CMDLINE_EDITING
 #define CONFIG_AUTO_COMPLETE
+#define CONFIG_CMDLINE_EDITING
+#define CONFIG_CMDLINE_TAG
+#define CONFIG_CMD_BOOTD
+#define CONFIG_CMD_CONSOLE
+#define CONFIG_CMD_DHCP
+#define CONFIG_CMD_ECHO
+#define CONFIG_CMD_FAT
+#define CONFIG_CMD_FS_GENERIC
+#define CONFIG_CMD_GETTIME
+#define CONFIG_CMD_GPIO
+/*#define CONFIG_CMD_JFFS2 holds up boot??? */
+#define CONFIG_CMD_LOADB
+#define CONFIG_CMD_LOADS
+#define CONFIG_CMD_MEMORY
+#define CONFIG_CMD_MISC
+#define CONFIG_CMD_MMC
+#define CONFIG_CMD_NET
+#define CONFIG_CMD_PING
+#define CONFIG_CMD_RUN
+#define CONFIG_CMD_SAVEENV
+#define CONFIG_CMD_SOURCE
+#define CONFIG_CMD_WATCHDOG
+#define CONFIG_CMD_L2CACHE	/* allcate l2cache support */
 /* #define CONFIG_CMD_NAND_FEATURES */		/* nand flash features operations CMD */
 /* #define CONFIG_CMD_I2C */
-/* #define CONFIG_AUTO_UPDATE */
-#ifdef CONFIG_AUTO_UPDATE
-#define CONFIG_CMD_SDUPDATE		1
+/*#define CONFIG_CMD_SDSTART
+#define CONFIG_AUTO_UPDATE
+#define CONFIG_CMD_SDUPDATE*/
+#define CONFIG_CMD_SOC_INFO
+#define CONFIG_CMD_ETHADDR
+#define CONFIG_CMD_FACTORY
+#define CONFIG_CMD_JZNET
+#define CONFIG_CMD_SQUASH_PROBE
+#define CONFIG_SYS_HUSH_PARSER
+
+/* these cause a hang when booting from MMC - until we fix MMC env, or probably because the binary size exceeds the sys_monitor_len size?*/
+#ifndef CONFIG_ENV_IS_IN_MMC
+#define CONFIG_SYS_HUSH_PARSER
+#define CONFIG_CMD_EXT2
+#define CONFIG_CMD_EXT4
+#define CONFIG_CMD_NFS
+#define CONFIG_CMD_TFTPDOWNLOAD
+#define CONFIG_CMD_TFTPPUT
+#define CONFIG_CMD_TFTPSRV
+#define CONFIG_CMD_USB
 #endif
+
+/*#define CONFIG_SPI_FLASH_BAR*/
 
 /************************ USB CONFIG ***************************/
 #ifdef CONFIG_CMD_USB
@@ -803,6 +817,12 @@
  */
 #define CONFIG_DOS_PARTITION
 
+#define CONFIG_SPL_LZOP
+
+#if defined(CONFIG_SPL_LZOP)
+#define CONFIG_DECMP_BUFFER_ADRS	0x80200000
+#endif
+
 #define CONFIG_LZO
 #define CONFIG_RBTREE
 #define CONFIG_LZMA
@@ -876,7 +896,7 @@
 #ifdef CONFIG_BIG_SPL
 #define CONFIG_SPL_MAX_SIZE     102400  /* 100KB */
 #define CONFIG_SPL_PAD_TO       102400 /* equal to spl max size in T15g */
-#elif  defined (CONFIG_SPL_SFC_NAND)
+#elif defined (CONFIG_SPL_SFC_NAND)
 #define CONFIG_SPL_MAX_SIZE     27648
 #define CONFIG_SPL_PAD_TO		27648 /* equal to spl max size in T15g */
 #else
@@ -927,24 +947,24 @@
 #define CONFIG_SYS_MMC_ENV_DEV		0
 #endif
 #ifdef CONFIG_JZ_MMC_MSC1
-#define CONFIG_SYS_MMC_ENV_DEV      1
+#define CONFIG_SYS_MMC_ENV_DEV		1
 #endif
 #define CONFIG_ENV_SIZE			(32 << 10)
 #define CONFIG_ENV_OFFSET		(CONFIG_SYS_MONITOR_LEN + CONFIG_SYS_MMCSD_RAW_MODE_U_BOOT_SECTOR * 512)
-#elif CONFIG_ENV_IS_IN_SPI_FLASH /* nor env */
-#define CONFIG_ENV_SECT_SIZE	(1024 * 16)
-#define CONFIG_ENV_SIZE			(1024 * 16)
-#define CONFIG_ENV_OFFSET		(CONFIG_SYS_MONITOR_LEN + CONFIG_UBOOT_OFFSET)
-#elif CONFIG_ENV_IS_IN_SFC_NAND /* nand env */
+#elif defined(CONFIG_ENV_IS_IN_SPI_FLASH)/* nor env */
+#define CONFIG_ENV_OFFSET		0x40000
+#define CONFIG_ENV_SIZE			0x10000
+#define CONFIG_ENV_SECT_SIZE	0x10000
+#elif defined(CONFIG_ENV_IS_IN_SFC_NAND) /* nand env */
 #define CONFIG_ENV_SECT_SIZE	0x20000 /* 128K*/
-#define SPI_NAND_BLK            0x20000 /*the spi nand block size */
+#define SPI_NAND_BLK			0x20000 /*the spi nand block size */
 #define CONFIG_ENV_SIZE         SPI_NAND_BLK /* uboot is 1M but the last block size is the env*/
 #define CONFIG_SYS_REDUNDAND_ENVIRONMENT /* double env partition ; If there is only one env partition, please annotate it.*/
 #ifdef CONFIG_SYS_REDUNDAND_ENVIRONMENT
-#define CONFIG_ENV_OFFSET       0xc0000 /* offset is 768k */
+#define CONFIG_ENV_OFFSET		0xc0000 /* offset is 768k */
 #define CONFIG_ENV_OFFSET_REDUND (CONFIG_ENV_OFFSET + CONFIG_ENV_SIZE)
 #else
-#define CONFIG_ENV_OFFSET       0xe0000 /* offset is 896k */
+#define CONFIG_ENV_OFFSET		0xe0000 /* offset is 896k */
 #endif
 #endif /* endif CONFIG_ENV_IS_IN_MMC */
 
@@ -988,5 +1008,58 @@
 #else
 #define CONFIG_SYS_MAX_FLASH_SECT 0
 #endif
+
+#if defined(CONFIG_SPL_MMC_SUPPORT)
+#define CONFIG_BOOTCOMMAND \
+"setenv setargs setenv bootargs ${bootargs};run setargs;" \
+"mmc rescan;fatload mmc 0:1 ${baseaddr} uImage;" \
+"bootm ${baseaddr};"
+#elif defined(CONFIG_SFC_NOR)
+#define CONFIG_BOOTCOMMAND \
+"sf probe;sq probe;setenv setargs setenv bootargs ${bootargs};run setargs;" \
+"sf read ${baseaddr} \\${kern_addr} \\${kern_len};" \
+"bootm ${baseaddr};"
+#elif defined(CONFIG_SFC_NAND)
+#define CONFIG_BOOTCOMMAND \
+"sf probe;sq probe;setenv setargs setenv bootargs ${bootargs};run setargs;" \
+"sfcnand read \\${kern_addr} \\${kern_len} ${baseaddr};" \
+"bootm ${baseaddr};"
+#else
+#define CONFIG_BOOTCOMMAND \
+"sf probe;sq probe;setenv setargs setenv bootargs ${bootargs};run setargs;" \
+"sf read ${baseaddr} 0x50000 0x250000;" \
+"bootm ${baseaddr};"
+#endif
+
+#if defined(CONFIG_SPL_MMC_SUPPORT)
+#define ROOTFS_CONFIG " root=/dev/mmcblk0p2 rootfstype=ext4 rw rootwait init=/init"
+#else
+#define ROOTFS_CONFIG " root=/dev/mtdblock3 rootfstype=squashfs init=/init"
+#endif
+
+#define CONFIG_BOOTARGS \
+BOOTARGS_COMMON \
+" console=\\${serialport},\\${baudrate}n8 panic=\\${panic_timeout}" \
+ROOTFS_CONFIG \
+" mtdparts=jz_sfc:256k(boot),64k(env),\\${kern_size}(kernel),\\${rootfs_size}(rootfs),-(rootfs_data)\\${update}"
+
+#define CONFIG_EXTRA_ENV_SETTINGS \
+"baseaddr=0x80600000\0" \
+"panic_timeout=10\0" \
+"serialport=ttyS1\0" \
+"disable_eth=false\0" \
+"disable_sd=false\0" \
+"enable_updates=false\0" \
+"boot_complete=false\0" \
+"soc="CONFIG_SOC"\0" \
+CONFIG_EXTRA_SETTINGS \
+CONFIG_GPIO_SETTINGS \
+CONFIG_GPIO_IRCUT_SETTINGS \
+CONFIG_DEVICE_ENV
+
+#define CONFIG_GPIO_IRCUT_SETTINGS \
+"gpio_ircut=52I 53I 49I 50I 57I 58I\0"
+
+#define CONFIG_DEVICE_ENV \
 
 #endif /* __CONFIG_ISVP_T41_H__ */
