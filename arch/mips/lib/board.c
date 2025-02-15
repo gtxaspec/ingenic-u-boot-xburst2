@@ -481,7 +481,7 @@ extern void board_usb_init(void);
 int checkboard(void)
 {
 	char output[100];
-	puts("Platform: ISVP (Ingenic XBurst2)\n");
+	puts("Platform: ISVP (Ingenic XBurst@II)\n");
 	sprintf(output, "Built profile: %s\n", SOC_VAR);
 	puts(output);
 
