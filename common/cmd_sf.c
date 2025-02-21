@@ -554,8 +554,8 @@ static int do_spi_flash0(cmd_tbl_t *cmdtp, int flag, int argc, char * const argv
 		ret = do_spi_flash_probe(argc, argv,SFC_0);
 		/* Grab flash chip size and save it */
 		char flashlen_str[32], flashsize_str[32], flashsector_str[32];
-		int64_t flashsize = flash->size;
-		int64_t flashsector = flash->sector_size;
+		int64_t flashsize = flash0->size;
+		int64_t flashsector = flash0->sector_size;
 
 		sprintf(flashlen_str, "%llx", flashsize);
 		setenv("flash_len", flashlen_str);
