@@ -1,20 +1,16 @@
 #include <common.h>
 #include <div64.h>
 #include <malloc.h>
-#include <spi_flash.h>
+#include <configs/isvp_common.h>
 
-#define ALIGNMENT_BLOCK_SIZE        0x10000  // 64KB
+#define ALIGNMENT_BLOCK_SIZE        CONFIG_SFC_MIN_ALIGN
 #define KERNEL_MAGIC_NUMBER         0x56190527
-#define KERNEL_MAGIC_OFFSET         0
 #define SQUASHFS_BYTES_USED_OFFSET  40
 #define SQUASHFS_MAGIC              0x73717368
-#define SQUASHFS_MAGIC_OFFSET       0
-
-/* env functions which do not use the flash api */
-
-#define KERNEL_FLASH_OFFSET 0x50000
-#define KERNEL_READ_SIZE    0x100000
-#define ROOTFS_READ_SIZE    0x100000
+#define KERNEL_FLASH_OFFSET         0x50000  /* Start reading for the kernel at this offset */
+#define KERNEL_READ_SIZE            0x100000 /* Read this much data to search for the kernel starting from the kernel offset */
+#define ROOTFS_READ_SIZE            0x150000 /* Read this much data from the kernel offset to search for the rootfs */
+#define ROOTFS_READ_OFFSET          0x135000 /* Start reading for the rootfs at this offset */
 
 static int search_for_magic(const char *buf, size_t size, uint32_t magic)
 {
@@ -28,7 +24,7 @@ static int search_for_magic(const char *buf, size_t size, uint32_t magic)
 	return -1;
 }
 
-//find kernel start addr and save startaddr to ENV
+/* Find kernel start addr and save startaddr to ENV */
 uint32_t update_kernel_address_nor_noapi(void)
 {
 	int ret;
@@ -86,7 +82,7 @@ uint32_t update_rootfs_address_nor_noapi(void)
 	char *buf;
 	int offset_found;
 	uint32_t rootfs_flash_addr;
-	unsigned long kernel_flash_addr;  // retrieve this from env
+	unsigned long kernel_flash_addr;  /* retrieve saved value from env */
 
 	/* Retrieve the kernel start address from the environment variable "kern_addr" */
 	const char *kern_addr_str = getenv("kern_addr");
@@ -96,8 +92,8 @@ uint32_t update_rootfs_address_nor_noapi(void)
 	}
 	kernel_flash_addr = simple_strtoul(kern_addr_str, NULL, 16);
 
-	/* Kernel will not be smaller than 1.4mb, so start search there... */
-	sprintf(read_cmd, "sf read ${baseaddr} 0x%X 0x%X", (unsigned int)(kernel_flash_addr + 0x140000), ROOTFS_READ_SIZE);
+	/* Kernel will not be smaller than 1.2mb, so start search there... */
+	sprintf(read_cmd, "sf read ${baseaddr} 0x%X 0x%X", (unsigned int)(kernel_flash_addr + ROOTFS_READ_OFFSET), ROOTFS_READ_SIZE);
 
 	/* Execute the flash read command to load the block into RAM */
 	ret = run_command(read_cmd, 0);
@@ -109,7 +105,7 @@ uint32_t update_rootfs_address_nor_noapi(void)
 	/* Retrieve the RAM base address from the environment variable "baseaddr" */
 	baseaddr_str = getenv("baseaddr");
 	if (!baseaddr_str) {
-		printf("SQ:   Error: Environment variable 'baseaddr' not set.\n");
+		printf("SQ:    Error: Environment variable 'baseaddr' not set.\n");
 		return 0;
 	}
 	base_addr = simple_strtoul(baseaddr_str, NULL, 16);
@@ -118,12 +114,12 @@ uint32_t update_rootfs_address_nor_noapi(void)
 	/* Search through the loaded block for the rootfs magic value */
 	offset_found = search_for_magic(buf, ROOTFS_READ_SIZE, SQUASHFS_MAGIC);
 	if (offset_found < 0) {
-		printf("SQ:   Error: rootfs magic (0x%x) not found in flash block\n", SQUASHFS_MAGIC);
+		printf("SQ:    Error: rootfs magic (0x%x) not found in flash block\n", SQUASHFS_MAGIC);
 		return 0;
 	}
 
 	/* Calculate the rootfs flash address */
-	rootfs_flash_addr = kernel_flash_addr + 0x140000 + offset_found;
+	rootfs_flash_addr = kernel_flash_addr + ROOTFS_READ_OFFSET + offset_found;
 	{
 		char rootfs_addr_str[32];
 		sprintf(rootfs_addr_str, "0x%x", rootfs_flash_addr);
@@ -256,7 +252,7 @@ uint64_t update_overlay_start_addr_nor_noapi(void)
 {
     const char *rootfs_addr_str = getenv("rootfs_addr");
     if (!rootfs_addr_str) {
-        printf("SQ: Error: Environment variable 'rootfs_addr' not set.\n");
+        printf("SQ:    Error: Environment variable 'rootfs_addr' not set.\n");
         return 0;
     }
     /* Convert the rootfs start address (flash address) from a string to a number */
@@ -268,7 +264,7 @@ uint64_t update_overlay_start_addr_nor_noapi(void)
      */
     uint64_t rootfs_size = compute_rootfs_partition_size_nor_noapi();
     if (rootfs_size == 0) {
-        printf("SQ: Error: Unable to compute rootfs partition size.\n");
+        printf("SQ:    Error: Unable to compute rootfs partition size.\n");
         return 0;
     }
 
@@ -293,7 +289,7 @@ static int do_sq(cmd_tbl_t *cmdtp, int flag, int argc, char * const argv[])
 		return CMD_RET_USAGE;
 	}
 
-	if (strcmp(argv[1], "probe-alt") == 0) {
+	if (strcmp(argv[1], "probe") == 0 || strcmp(argv[1], "probe-alt") == 0) {
 		update_kernel_address_nor_noapi();
 		update_rootfs_address_nor_noapi();
 		compute_rootfs_partition_size_nor_noapi();
@@ -307,6 +303,6 @@ static int do_sq(cmd_tbl_t *cmdtp, int flag, int argc, char * const argv[])
 
 U_BOOT_CMD(
 	sq, 2, 1, do_sq,
-	"Probe SquashFS data in SPI flash",
-	"probe|probe-alt - Probe SquashFS data in SPI flash and update ENV"
+	"Probe Kernel / SquashFS data in SPI flash",
+	"probe|probe-alt - Probe Kernel / SquashFS data in SPI flash and update ENV"
 );
