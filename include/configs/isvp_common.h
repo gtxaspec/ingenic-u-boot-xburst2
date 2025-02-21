@@ -668,7 +668,11 @@
 #define CONFIG_CMD_EXT2
 #define CONFIG_CMD_EXT4
 #define CONFIG_CMD_NFS
-#define CONFIG_CMD_TFTPDOWNLOAD
+
+#ifndef CONFIG_SFC_NAND
+#define CONFIG_CMD_TFTPDOWNLOAD*/
+#endif
+
 #define CONFIG_CMD_TFTPPUT
 #define CONFIG_CMD_TFTPSRV
 #define CONFIG_CMD_USB
@@ -785,7 +789,7 @@
 #define CONFIG_SYS_PBSIZE (CONFIG_SYS_CBSIZE + sizeof(CONFIG_SYS_PROMPT) + 16)
 
 #if defined(CONFIG_SFC_NAND) || defined(CONFIG_SFC_NAND_COMMAND)
-#define CONFIG_SYS_MONITOR_LEN      (400 * 1024)
+#define CONFIG_SYS_MONITOR_LEN      (600 * 1024)
 #else
 #ifdef CONFIG_OF_LIBFDT /* support device tree */
 #define CONFIG_SYS_MONITOR_LEN		(230 * 1024)
@@ -825,7 +829,9 @@
 
 /* doesn't work in MMC yet? test again */
 #ifndef CONFIG_ENV_IS_IN_MMC
+#ifndef CONFIG_SFC_NAND
 #define CONFIG_SPL_LZOP
+#endif
 #endif
 
 #if defined(CONFIG_SPL_LZOP)
@@ -901,10 +907,6 @@
 #define CONFIG_ENV_OFFSET		0x40000
 #define CONFIG_ENV_SIZE			0x8000
 #define CONFIG_ENV_SECT_SIZE		0x8000
-#else
-#define CONFIG_ENV_IS_NOWHERE
-#define CONFIG_ENV_SIZE			(32 << 10)
-#define CONFIG_ENV_OFFSET		(CONFIG_SYS_NAND_BLOCK_SIZE * 5)
 #endif
 /**
  * GPT configuration
@@ -968,7 +970,7 @@ ROOTFS_CONFIG \
 " mtdparts=jz_sfc:256k(boot),32k(env),\\${kern_size}(kernel),\\${rootfs_size}(rootfs),-(rootfs_data)\\${update}"
 
 #define CONFIG_EXTRA_ENV_SETTINGS \
-"baseaddr=0x80600000\0" \
+"baseaddr=0x88000000\0" \
 "panic_timeout=10\0" \
 "serialport=ttyS1\0" \
 "disable_eth=false\0" \
