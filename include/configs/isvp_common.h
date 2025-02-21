@@ -540,7 +540,7 @@
 #endif /* CONFIG_SFC_NOR_COMMAND */
 
 /* SFC */
-#define CONFIG_SFC_MIN_ALIGN 0x1000  /*0x1000->4K Erase,0x8000->32k 0x10000->64k*/
+#define CONFIG_SFC_MIN_ALIGN 0x8000  /*0x1000->4K Erase,0x8000->32k 0x10000->64k*/
 #if defined(CONFIG_SPL_SFC_SUPPORT) || defined(CONFIG_SFC_NAND_COMMAND)
 #define CONFIG_SPL_SERIAL_SUPPORT
 #define CONFIG_SPI_SPL_CHECK
@@ -899,8 +899,8 @@
 #define CONFIG_ENV_OFFSET		(CONFIG_SYS_MONITOR_LEN + CONFIG_SYS_MMCSD_RAW_MODE_U_BOOT_SECTOR * 512)
 #elif defined(CONFIG_ENV_IS_IN_SPI_FLASH)
 #define CONFIG_ENV_OFFSET		0x40000
-#define CONFIG_ENV_SIZE			0x10000
-#define CONFIG_ENV_SECT_SIZE		0x10000
+#define CONFIG_ENV_SIZE			0x8000
+#define CONFIG_ENV_SECT_SIZE		0x8000
 #else
 #define CONFIG_ENV_IS_NOWHERE
 #define CONFIG_ENV_SIZE			(32 << 10)
@@ -965,7 +965,7 @@
 BOOTARGS_COMMON \
 " console=\\${serialport},\\${baudrate}n8 panic=\\${panic_timeout}" \
 ROOTFS_CONFIG \
-" mtdparts=jz_sfc:256k(boot),64k(env),\\${kern_size}(kernel),\\${rootfs_size}(rootfs),-(rootfs_data)\\${update}"
+" mtdparts=jz_sfc:256k(boot),32k(env),\\${kern_size}(kernel),\\${rootfs_size}(rootfs),-(rootfs_data)\\${update}"
 
 #define CONFIG_EXTRA_ENV_SETTINGS \
 "baseaddr=0x80600000\0" \
