@@ -606,7 +606,7 @@ int sfc_ctl_init(struct sfc *sfc)
 	reg_clkgr &= ~gate;
 	cpm_outl(reg_clkgr,CPM_CLKGR0);
 	/* When the SFC SSI clock is turned on, the SD card needs to be started */
-	printf("***sfc init!\n");
+	printf("SFC init OK\n");
 
 	sfc_init(sfc);
 	sfc_stop(sfc);
