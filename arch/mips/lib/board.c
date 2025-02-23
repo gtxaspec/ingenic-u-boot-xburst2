@@ -339,9 +339,11 @@ void board_init_r(gd_t *id, ulong dest_addr)
 	bd->bi_flashoffset = 0;
 #endif
 
+#if 0
 #ifdef CONFIG_CMD_NAND
 	puts("NAND:  ");
 	nand_init();		/* go init the NAND */
+#endif
 #endif
 #ifdef CONFIG_CMD_SFCNAND
 	puts("SFC_NAND:  ");
@@ -402,6 +404,12 @@ extern void board_usb_init(void);
 	misc_init_r();
 #endif
 
+	/* Check for factory reset input */
+	if (run_command("factory reset-boot", 0) == 0) {
+		printf("RST:   reset successful, resetting system...\n");
+		run_command("reset", 0);
+	}
+
 	/* Platform Default GPIO Set */
 	handle_gpio_settings("gpio_default");
 
@@ -416,11 +424,6 @@ extern void board_usb_init(void);
 	/* Probe for jz phy */
 	if (run_command("jznet init", 0) != 0) {
 		printf("JZNET:   init failed\n");
-	}
-
-	if (run_command("factory reset-boot", 0) == 0) {
-		printf("RST:   reset successful, resetting system...\n");
-		run_command("reset", 0);
 	}
 
 	/* Try to get the value of the 'disable_sd' environment variable */
