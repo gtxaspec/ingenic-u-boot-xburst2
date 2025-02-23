@@ -385,11 +385,13 @@ static void nand_print_and_set_info(int idx)
 	printf("  Page size  %8d b\n", nand->writesize);
 	printf("  OOB size   %8d b\n", nand->oobsize);
 	printf("  Erase size %8d b\n", nand->erasesize);
+	printf("  NAND size %llu MB\n", (unsigned long long) nand->size / (1024 * 1024));
 
 	/* Set geometry info */
 	setenv_hex("nand_writesize", nand->writesize);
 	setenv_hex("nand_oobsize", nand->oobsize);
 	setenv_hex("nand_erasesize", nand->erasesize);
+	setenv_hex("nand_size", nand->size);
 }
 
 static int raw_access(nand_info_t *nand, ulong addr, loff_t off, ulong count,
