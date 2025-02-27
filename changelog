@@ -1,0 +1,46 @@
+20230921
+取消DB编译选项，开发板网卡配置，需修改include\configs\isvp_a1.h。闻超
+
+20220523
+uboot编译增加板子名称参数DB，
+当前以有的型号为 TUCANA | GORILLA | CALF | CALF_1_2,四种板子型号,
+不带参数默认使用CALF.
+eg.
+make DB=CALF_1_2 isvp_a1_nt_sfc0nor 编译CALF_1_2板子nt芯片的nor启uboot.韩义文
+
+20210525
+修改SFC时钟配置，使配置时钟与实际输出时钟一致。
+因为SFC模块内部会对时钟进行4分频，导致实际输出只有配置的1/4。
+SFC-NAND支持mtdparts传入分区表。余童
+
+20210522
+可以支持单独烧录dtb文件。
+isvp_t40.h中打开CONFIG_OF_LIBFDT的宏，就会编入fdt需要的文件。张建胜
+
+20210510
+完善T40N-DDR2的配置，T40N支持APLL1000MHz,DDR550MHz。余童
+SPL大小还原为26KB，否则导致环境变量保存会出现64KB擦除非对齐问题。余童
+
+20210506
+T40 uboot支持USB转以太网卡    时文杰
+
+20210415
+uboot 修改Makefile的错误，mbr-gpt可以正常使用。张建胜
+
+20210413
+支持T40N，添加好一套可以使用的DDR2配置。余童
+
+20210408
+修改APLL为1104M,修改MSC(25M),SFC(50M),MACPHY(50M)的时钟源为MPLL。张建胜
+
+20210330
+添加T40A-DDR3-512MB配置。余童
+
+20210325
+添加T40 DDR3 ODT和驱动能力配置。张建胜
+
+20210322
+add t40n config, Damon
+
+20210308
+初始化changelog，张建胜
