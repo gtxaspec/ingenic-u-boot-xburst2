@@ -801,7 +801,7 @@ void register_ddr_creator(struct ddr_creator_ops *ops)
 
 static void a1all_head_file_create()
 {
-	int i, fname[50];
+	char i, fname[50];
 	FILE *fp;
 	sprintf(fname, "a1all.h");
 	fp = fopen(fname, "w");
@@ -935,7 +935,8 @@ static void a1all_head_file_create()
 
 static void inc_file_create(char * postfix)
 {
-	int i, fname[50];
+	int i;
+	char fname[50];
 	FILE *fp;
 	sprintf(fname, "%s.h", postfix);
 	fp = fopen(fname, "w");
@@ -1144,7 +1145,8 @@ static void src_file_get_dynamic_refcnt(char *postfix, struct ddr_params *p, FIL
 
 static void src_file_create(char *postfix, struct ddr_params *p, struct ddrc_reg *ddrc, struct ddrp_reg *ddrp)
 {
-	int i, fname[50];
+	int i;
+	char fname[50];
 	FILE *fp;
 	sprintf(fname, "%s.c", postfix);
 	fp = fopen(fname, "w");
