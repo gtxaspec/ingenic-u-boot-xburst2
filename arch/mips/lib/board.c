@@ -403,6 +403,10 @@ extern void board_usb_init(void);
 	/* miscellaneous platform dependent initialisations */
 	misc_init_r();
 #endif
+	/* On T40 NOR, sometimes ENV will lock up when the CRC is bad, if the flash isn't probed early */
+	if (run_command("sf probe", 0) != 0) {
+		printf("SF:    sf probe failed\n");
+	}
 
 	/* Check for factory reset input */
 	if (run_command("factory reset-boot", 0) == 0) {
