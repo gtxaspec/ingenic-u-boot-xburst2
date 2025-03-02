@@ -970,7 +970,7 @@ ROOTFS_CONFIG \
 " mtdparts=jz_sfc:256k(boot),32k(env),\\${kern_size}(kernel),\\${rootfs_size}(rootfs),-(rootfs_data)\\${update}"
 
 #define CONFIG_EXTRA_ENV_SETTINGS \
-"baseaddr=0x88000000\0" \
+"baseaddr=0x80600000\0" \
 "panic_timeout=10\0" \
 "serialport=ttyS1\0" \
 "disable_eth=false\0" \
