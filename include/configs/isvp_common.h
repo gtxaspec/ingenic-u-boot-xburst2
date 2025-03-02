@@ -1009,6 +1009,8 @@
 #define CONFIG_SYS_MAX_FLASH_SECT 0
 #endif
 
+#ifndef CONFIG_BOOTARGS_EXTERNAL
+
 #if defined(CONFIG_SPL_MMC_SUPPORT)
 #define CONFIG_BOOTCOMMAND \
 "setenv setargs setenv bootargs ${bootargs};run setargs;" \
@@ -1054,6 +1056,27 @@ ROOTFS_CONFIG \
 "soc="CONFIG_SOC"\0" \
 CONFIG_EXTRA_SETTINGS \
 CONFIG_GPIO_SETTINGS \
+CONFIG_GPIO_IRCUT_SETTINGS
+
+#define CONFIG_GPIO_IRCUT_SETTINGS \
+"gpio_ircut=52I 53I 49I 50I 57I 58I\0"
+
+#else
+
+/* cmd_boota.c needs this -_- legacy ingenic code */
+#define CONFIG_BOOTARGS ""
+
+#define CONFIG_EXTRA_ENV_SETTINGS \
+"baseaddr=0x80600000\0" \
+"panic_timeout=10\0" \
+"serialport=ttyS1\0" \
+"disable_eth=false\0" \
+"disable_sd=false\0" \
+"enable_updates=false\0" \
+"boot_complete=false\0" \
+"soc="CONFIG_SOC"\0" \
+CONFIG_EXTRA_SETTINGS \
+CONFIG_GPIO_SETTINGS \
 CONFIG_GPIO_IRCUT_SETTINGS \
 CONFIG_DEVICE_ENV
 
@@ -1061,5 +1084,7 @@ CONFIG_DEVICE_ENV
 "gpio_ircut=52I 53I 49I 50I 57I 58I\0"
 
 #define CONFIG_DEVICE_ENV \
+
+#endif
 
 #endif /* __CONFIG_ISVP_T41_H__ */
