@@ -166,9 +166,7 @@ void set_default_env(const char *s)
 
 	if (s) {
 		if (*s == '!') {
-			printf("*** Warning - %s, "
-				"using default environment\n\n",
-				s + 1);
+			printf("ENV:   Warning - %s, using default environment\n", s + 1);
 		} else {
 			flags = H_INTERACTIVE;
 			puts(s);
@@ -178,7 +176,7 @@ void set_default_env(const char *s)
 	}
 
 	if (himport_r(&env_htab, (char *)default_environment,
-			sizeof(default_environment), '\0', flags,
+			sizeof(default_environment), '\0', flags, 0,
 			0, NULL) == 0)
 		error("Environment import failed: errno = %d\n", errno);
 
@@ -195,7 +193,7 @@ int set_default_vars(int nvars, char * const vars[])
 	 */
 	return himport_r(&env_htab, (const char *)default_environment,
 				sizeof(default_environment), '\0',
-				H_NOCLEAR | H_INTERACTIVE, nvars, vars);
+				H_NOCLEAR | H_INTERACTIVE, 0, nvars, vars);
 }
 
 #ifndef CONFIG_SPL_BUILD
@@ -214,11 +212,15 @@ int env_import(const char *buf, int check)
 
 		if (crc32(0, ep->data, ENV_SIZE) != crc) {
 			set_default_env("!bad CRC");
+			if (crc == 0xffffffff) {
+				printf("ENV:   Saving default environment...\n");
+				saveenv();
+			}
 			return 0;
 		}
 	}
 
-	if (himport_r(&env_htab, (char *)ep->data, ENV_SIZE, '\0', 0,
+	if (himport_r(&env_htab, (char *)ep->data, ENV_SIZE, '\0', 0, 0,
 			0, NULL)) {
 		gd->flags |= GD_FLG_ENV_READY;
 		return 1;
