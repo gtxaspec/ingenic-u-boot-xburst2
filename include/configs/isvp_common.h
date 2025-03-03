@@ -701,7 +701,6 @@
 #define CONFIG_CMD_FACTORY
 #define CONFIG_CMD_JZNET
 #define CONFIG_CMD_SQUASH_PROBE
-#define CONFIG_SYS_HUSH_PARSER
 
 /* these cause a hang when booting from MMC - until we fix MMC env, or probably because the binary size exceeds the sys_monitor_len size?*/
 #ifndef CONFIG_ENV_IS_IN_MMC
