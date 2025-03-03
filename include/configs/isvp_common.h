@@ -664,7 +664,6 @@
 /* these cause a hang when booting from MMC - until we fix MMC env*/
 #ifndef CONFIG_ENV_IS_IN_MMC
 #define CONFIG_CMD_SQUASH_PROBE
-#define CONFIG_SYS_HUSH_PARSER
 #define CONFIG_CMD_EXT2
 #define CONFIG_CMD_EXT4
 #define CONFIG_CMD_NFS
