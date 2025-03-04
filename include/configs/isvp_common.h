@@ -635,6 +635,7 @@
 #define CONFIG_CMD_CONSOLE
 #define CONFIG_CMD_DHCP
 #define CONFIG_CMD_ECHO
+#define CONFIG_CMD_ENV_CALLBACK /* needed for env on t40 */
 #define CONFIG_CMD_FAT
 #define CONFIG_CMD_FS_GENERIC
 #define CONFIG_CMD_GETTIME
