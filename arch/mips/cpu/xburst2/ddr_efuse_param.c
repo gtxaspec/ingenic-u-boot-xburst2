@@ -32,7 +32,7 @@
 #include <ddr/ddr_common.h>
 #ifdef CONFIG_A1ALL
 #include <generated/ddr_reg_values_a1all.h>
-struct a1_ddr_params *pddr_params;
+extern struct a1_ddr_params *pddr_params;
 #else
 #include <generated/ddr_reg_values.h>
 #endif
