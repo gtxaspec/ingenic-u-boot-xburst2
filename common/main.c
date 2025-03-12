@@ -70,8 +70,8 @@ static uint64_t endtime = 0;  /* must be set, default is instant timeout */
 static int      retry_time = -1; /* -1 so can call readline before main_loop */
 #endif
 
-#define	endtick(seconds) (get_ticks() + (uint64_t)(seconds) * get_tbclk())
-//#define endtick(seconds) ((uint64_t)(seconds) * get_tbclk())
+//#define	endtick(seconds) (get_ticks() + (uint64_t)(seconds) * get_tbclk())
+#define	endtick(seconds) ((uint64_t)(seconds) * get_tbclk())
 
 #ifndef CONFIG_BOOT_RETRY_MIN
 #define CONFIG_BOOT_RETRY_MIN CONFIG_BOOT_RETRY_TIME
