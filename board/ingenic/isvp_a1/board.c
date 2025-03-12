@@ -32,6 +32,9 @@
 #include <asm/arch/clk.h>
 #include <power/d2041_core.h>
 
+extern int debug_socinfo;
+extern int do_socinfo(cmd_tbl_t *cmdtp, int flag, int argc, char * const argv[]);
+
 extern int jz_net_initialize(bd_t *bis);
 struct cgu_clk_src cgu_clk_src[] = {
 	{MAC0PHY,	EPLL},
@@ -146,7 +149,13 @@ int spl_start_uboot(void)
 int checkboard(void)
 {
 #ifndef CONFIG_FAST_BOOT
-	puts("Board: ISVP (Ingenic XBurst A1 SoC)\n");
+        char output[100];
+        puts("Platform: ISVP (Ingenic XBurst@II)\n");
+        sprintf(output, "Built profile: %s\n", SOC_VAR);
+        puts(output);
+
+        debug_socinfo = 0;
+        do_socinfo(NULL, 0, 0, NULL);
 #endif
 	return 0;
 }

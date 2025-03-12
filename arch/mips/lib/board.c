@@ -48,9 +48,15 @@ extern void get_a1chip_ddr_config();
 extern struct a1_ddr_params *pddr_params;
 #endif
 
-DECLARE_GLOBAL_DATA_PTR;
+#define BOOT_SCRIPT "fatload mmc 0 ${baseaddr} boot.scr"
+#define ENV_FILE "fatload mmc 0 ${baseaddr} uEnv.txt"
 
+DECLARE_GLOBAL_DATA_PTR;
 ulong monitor_flash_len;
+
+extern int autoupdate_status;
+
+void handle_gpio_settings(const char *env_var_name);
 
 static char *failed = "*** failed ***\n";
 
@@ -411,14 +417,6 @@ extern void board_usb_init(void);
 	misc_init_r();
 #endif
 
-#ifdef CONFIG_BITBANGMII
-	bb_miiphy_init();
-#endif
-#if defined(CONFIG_CMD_NET)
-	puts("Net:   ");
-	eth_initialize(gd->bd);
-#endif
-
 #ifdef CONFIG_SPL_LZMA
 	struct ingenic_func g_m_func = {
 	.mmalloc = malloc,
@@ -427,6 +425,77 @@ extern void board_usb_init(void);
 
 	ingenic_set(&g_m_func);
 #endif
+
+/* Platform Default GPIO Set */
+handle_gpio_settings("gpio_default");
+
+/* Platform USB Power */
+handle_gpio_settings("gpio_usb_en");
+
+/* Set Hardware addresses from SoC S/N */
+if (run_command("ethaddr init", 0) != 0) {
+	printf("ETHADDR:   init failed\n");
+}
+
+/* Probe for jz phy */
+if (run_command("jznet init", 0) != 0) {
+	printf("JZNET:   init failed\n");
+}
+
+if (run_command("factory reset-boot", 0) == 0) {
+	printf("RST:   reset successful, resetting system...\n");
+	run_command("reset", 0);
+}
+
+/* Try to get the value of the 'disable_sd' environment variable */
+char* disable_sd = getenv("disable_sd");
+
+/* Check if disable_sd is "false". */
+if (disable_sd != NULL && strcmp(disable_sd, "false") == 0) {
+	/* MMC specific user GPIO set */
+	handle_gpio_settings("gpio_mmc_power");
+}
+
+/* IRCUT GPIO set */
+handle_gpio_settings("gpio_ircut");
+/* User defined GPIO set */
+handle_gpio_settings("gpio_user");
+/* User defined MOTOR GPIO set */
+handle_gpio_settings("gpio_motor_v");
+handle_gpio_settings("gpio_motor_h");
+
+/* Check if 'disable_sd' was found and compare its value */
+if (disable_sd != NULL && strcmp(disable_sd, "false") == 0) {
+	/* The environment variable 'disable_sd' exists and its value is "false" */
+	#ifdef CONFIG_AUTO_UPDATE
+		run_command("sf probe-alt;sdupdate",0);
+	#endif
+	#ifdef CONFIG_CMD_SDSTART
+		run_command("sdstart",0);
+	#endif
+
+	printf("MMC:   Checking for boot/env files...\n");
+	if (!run_command("fatload mmc 0 ${baseaddr} boot.scr", 0)) {
+		printf("MMC:   Loading boot.scr\n");
+		run_command(BOOT_SCRIPT, 0);
+		run_command("source ${baseaddr}", 0);
+	}
+
+	if (!run_command("fatload mmc 0 ${baseaddr} uEnv.txt", 0)) {
+		printf("MMC:   Loading uEnv.txt\n");
+		run_command(ENV_FILE, 0);
+		run_command("env import -t -r ${baseaddr} ${filesize};setenv filesize;saveenv;", 0);
+	}
+
+	if (autoupdate_status == 3) {
+		printf("MMC:   Auto-update is set to 'full'. Resetting the device...\n");
+		do_reset(NULL, 0, 0, NULL);
+	}
+} else {
+		/* 'disable_sd' does not exist or is not "true" */
+		printf("MMC:   SD card disabled\n");
+}
+
 	/* main_loop() can return to retry autoboot, if so just run it again. */
 	for (;;)
 		main_loop();
