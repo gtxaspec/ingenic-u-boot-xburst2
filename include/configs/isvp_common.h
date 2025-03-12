@@ -796,7 +796,7 @@ kgd parameters are extracted from ddr3_param_t.*/
 #define CONFIG_ETH1PHYADDR      (0)
 
 #define CONFIG_ETHPRIME         "mii0"
-#define CONFOG_ETHROTATE        "no"
+#define CONFIG_ETHROTATE        "no"
 
 #define A1_GMAC0_PORTS_GROUP GPIO_PORT_A
 #define A1_GMAC0_PORT_PINS (0x7fff)
@@ -994,10 +994,10 @@ if use rmii 100Mbps net card,must define A1_MACxPHY_RMIIx_MACCDR.
 
 #define CONFIG_BOOTP_MASK	(CONFIG_BOOTP_DEFAUL)
 
-#define CONFIG_SYS_MAXARGS 16
+#define CONFIG_SYS_MAXARGS 64
 #define CONFIG_SYS_LONGHELP
 #define CONFIG_SYS_PROMPT CONFIG_SYS_BOARD "# "
-#define CONFIG_SYS_CBSIZE 1024 /* Console I/O Buffer Size */
+#define CONFIG_SYS_CBSIZE 2048 /* Console I/O Buffer Size */
 #define CONFIG_SYS_PBSIZE (CONFIG_SYS_CBSIZE + sizeof(CONFIG_SYS_PROMPT) + 16)
 
 #if defined(CONFIG_SFC_NAND) || defined(CONFIG_SFC_NAND_COMMAND)
