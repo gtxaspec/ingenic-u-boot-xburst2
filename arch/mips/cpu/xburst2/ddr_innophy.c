@@ -186,26 +186,26 @@ void  get_a1chip_ddr_config(void)
 	switch (chip) {
 		case 0x1111:
 			pddr_params = &a1n_ddr_para;
-			printf("chip type is A1N\n");
+			debug("chip type is A1N\n");
 			break;
 
 		case 0x5555:
 			pddr_params = &a1nt_ddr_para;
-			printf("chip type is A1NT\n");
+			debug("chip type is A1NT\n");
 			break;
 
 		case 0x2222:
 			pddr_params = &a1x_ddr_para;
-			printf("chip type is A1X\n");
+			debug("chip type is A1X\n");
 			break;
 
 		case 0x3333:
 			pddr_params = &a1l_ddr_para;
-			printf("chip type is A1L\n");
+			debug("chip type is A1L\n");
 			break;
 
 		default:
-			printf("Now 0x%x is not support!!!\n",chip);
+			printf("SoC 0x%x is not supported!\n",chip);
 			break;
 	}
 }
