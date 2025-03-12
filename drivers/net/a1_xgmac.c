@@ -407,18 +407,18 @@ int a1_eth_config_phy(struct eth_device *dev)
 
 	ret = miiphy_read(dev->name, phy_addr, 2, &id1);
 	if (ret) {
-		printf("gmac: %s, %d, phy read failed!\n", __func__, __LINE__); return -1;
+		printf("gmac:  %s, %d, phy read failed!\n", __func__, __LINE__); return -1;
 	}
 
 	ret = miiphy_read(dev->name, phy_addr, 3, &id2);
 	if (ret) {
-		printf("gmac: %s, %d, phy read failed!\n", __func__, __LINE__); return -1;
+		printf("gmac:  %s, %d, phy read failed!\n", __func__, __LINE__); return -1;
 	}
-	printf("gmac: phyid %x-%x,%x\n", id1, id2,phy_addr);
+	printf("gmac:  phyid %x-%x,%x\n", id1, id2,phy_addr);
 
 	ret = miiphy_read(dev->name, phy_addr, MII_BMCR, &bmcr);
 	if (ret) {
-		printf("gmac: %s, %d, phy read failed!\n", __func__, __LINE__); return -1;
+		printf("gmac:  %s, %d, phy read failed!\n", __func__, __LINE__); return -1;
 	}
 
 
@@ -451,7 +451,7 @@ int a1_eth_config_phy(struct eth_device *dev)
 	if ((0x7 == id1)&&(0xc0f1 == id2)) {
 		ret = miiphy_read(dev->name, phy_addr, 31, &reg);
 		if (ret) {
-			printf("gmac: %s, %d, phy read failed!\n", __func__, __LINE__); return -1;
+			printf("gmac:  %s, %d, phy read failed!\n", __func__, __LINE__); return -1;
 		}
 		reg = (reg>>2)&0x7;
 		if (0x1 == reg) {
@@ -467,7 +467,7 @@ int a1_eth_config_phy(struct eth_device *dev)
 			priv->speed = _100BASET;
 			priv->duplex = FULL;
 		} else {
-			printf("gmac: %s, %d, PHY STATUS ERROR %d!\n", __func__, __LINE__, reg); return -1;
+			printf("gmac:  %s, %d, PHY STATUS ERROR %d!\n", __func__, __LINE__, reg); return -1;
 		}
 	} else {
 		priv->speed = miiphy_speed(dev->name, phy_addr);
@@ -475,7 +475,7 @@ int a1_eth_config_phy(struct eth_device *dev)
 	}
 
 	if (priv->phy_configured == 1) {
-		printf("gmac: phy speed %d, duplex %d\n", priv->speed, priv->duplex);
+		printf("gmac:  phy speed %d, duplex %d\n", priv->speed, priv->duplex);
 	}
 	return 0;
 }
@@ -1127,12 +1127,12 @@ static int a1_eth_special_config(struct eth_device *dev)
 
 	ret = miiphy_read(dev->name, phy_addr, 2, &id1);
 	if (ret) {
-		printf("gmac: %s, %d, phy read failed!\n", __func__, __LINE__); return -1;
+		printf("gmac:  %s, %d, phy read failed!\n", __func__, __LINE__); return -1;
 	}
 
 	ret = miiphy_read(dev->name, phy_addr, 3, &id2);
 	if (ret) {
-		printf("gmac: %s, %d, phy read failed!\n", __func__, __LINE__); return -1;
+		printf("gmac:  %s, %d, phy read failed!\n", __func__, __LINE__); return -1;
 	}
         /*
          sz18201 phy enabled sleep function default,it will disabled txc clock when unplug network cable 40s.
@@ -1141,13 +1141,13 @@ static int a1_eth_special_config(struct eth_device *dev)
 	if ((0 == id1)&&(0x128 == id2)) {
                 ret = miiphy_write(dev->name,phy_addr,0x1e,0x2027);
                 if (ret) {
-                        printf("gmac: %s, %d, phy write failed!\n", __func__, __LINE__); return -1;
+                        printf("gmac:  %s, %d, phy write failed!\n", __func__, __LINE__); return -1;
                 }
                 ret = miiphy_write(dev->name,phy_addr,0x1f,0x2026);
                 if (ret) {
-                        printf("gmac: %s, %d, phy write failed!\n", __func__, __LINE__); return -1;
+                        printf("gmac:  %s, %d, phy write failed!\n", __func__, __LINE__); return -1;
                 }
-                printf("gmac: sz18201 disabled sleep\n");
+                printf("gmac:  sz18201 disabled sleep\n");
         }
 }
 #ifdef CONFIG_JZ_NET_ETHERNET_DUAL
@@ -1165,7 +1165,7 @@ int a1_eth1_initialize(bd_t *bis)
 
 	ret = a1_mdio_init(bis, A1_XGMAC1_NAME_MDIO);
 	if (ret) {
-		printf("gmac: mdio1 init failed! ret = %d\n", ret);
+		printf("gmac:  mdio1 init failed! ret = %d\n", ret);
 		return -1;
 	}
 	dev = (struct eth_device *) malloc(sizeof(struct eth_device));
@@ -1188,17 +1188,17 @@ int a1_eth1_initialize(bd_t *bis)
 	priv->rx_mac_descrtable = _rx_mac1_descrtable;
 	priv->txbuffs = _txbuffs_mac1;
 	priv->rxbuffs = _rxbuffs_mac1;
-	printf("gmac: tx_mac1_descrtable : 0x%08x\n", priv->tx_mac_descrtable);
-	printf("gmac: rx_mac1_descrtable : 0x%08x\n", priv->rx_mac_descrtable);
-	printf("gmac: txbuffs_mac1           : 0x%08x\n", priv->txbuffs);
-	printf("gmac: rxbuffs_mac1           : 0x%08x\n", priv->rxbuffs);
+	printf("gmac:  tx_mac1_descrtable : 0x%08x\n", priv->tx_mac_descrtable);
+	printf("gmac:  rx_mac1_descrtable : 0x%08x\n", priv->rx_mac_descrtable);
+	printf("gmac:  txbuffs_mac1           : 0x%08x\n", priv->txbuffs);
+	printf("gmac:  rxbuffs_mac1           : 0x%08x\n", priv->rxbuffs);
 	memset(_tx_mac1_descrtable, 0, sizeof(_tx_mac1_descrtable[CONFIG_TX_DESCR_NUM]));
 	memset(_rx_mac1_descrtable, 0, sizeof(_rx_mac1_descrtable[CONFIG_TX_DESCR_NUM]));
 	memset(_txbuffs_mac1, 0, sizeof(_txbuffs_mac1[TX_TOTAL_BUFSIZE]));
 	memset(_rxbuffs_mac1, 0, sizeof(_rxbuffs_mac1[RX_TOTAL_BUFSIZE]));
 
 	char *ethmii = getenv("eth1mii");
-	printf("gmac debug: eth1mii = %s\n", ethmii);
+	printf("gmac:  eth1mii = %s\n", ethmii);
 	if(ethmii != NULL){
 		if(!strcmp(ethmii,"rmii")){
 			clk_set_rate(MAC1PHY, A1_MAC1PHY_RMII1_MACCDR);
@@ -1216,7 +1216,7 @@ int a1_eth1_initialize(bd_t *bis)
 		}
 	}
 	else{
-		printf("gmac debug: eth1mii env not set,default use rmii,set 50Mhz\n");
+		printf("gmac:  eth1mii env not set,default use rmii,set 50Mhz\n");
 		dev->mii = GMAC_PHY_RMII;
 		clk_set_rate(MAC1PHY, A1_CPM_MACCDR_50MHZ);
 	}
@@ -1275,7 +1275,7 @@ int a1_eth_initialize(bd_t *bis)
 
 	ret = a1_mdio_init(bis, A1_XGMAC0_NAME_MDIO);
 	if (ret) {
-		printf("gmac: mdio init failed! ret = %d\n", ret);
+		printf("gmac:  mdio init failed! ret = %d\n", ret);
 		return -1;
 	}
 	dev = (struct eth_device *) malloc(sizeof(struct eth_device));
@@ -1298,10 +1298,10 @@ int a1_eth_initialize(bd_t *bis)
 	priv->rx_mac_descrtable = _rx_mac_descrtable;
 	priv->txbuffs = _txbuffs;
 	priv->rxbuffs = _rxbuffs;
-	printf("gmac: tx_mac_descrtable : 0x%08x\n", priv->tx_mac_descrtable);
-	printf("gmac: rx_mac_descrtable : 0x%08x\n", priv->rx_mac_descrtable);
-	printf("gmac: txbuffs           : 0x%08x\n", priv->txbuffs);
-	printf("gmac: rxbuffs           : 0x%08x\n", priv->rxbuffs);
+	printf("gmac:  tx_mac_descrtable : 0x%08x\n", priv->tx_mac_descrtable);
+	printf("gmac:  rx_mac_descrtable : 0x%08x\n", priv->rx_mac_descrtable);
+	printf("gmac:  txbuffs           : 0x%08x\n", priv->txbuffs);
+	printf("gmac:  rxbuffs           : 0x%08x\n", priv->rxbuffs);
 	memset(_tx_mac_descrtable, 0, sizeof(_tx_mac_descrtable[CONFIG_TX_DESCR_NUM]));
 	memset(_rx_mac_descrtable, 0, sizeof(_rx_mac_descrtable[CONFIG_TX_DESCR_NUM]));
 	memset(_txbuffs, 0, sizeof(_txbuffs[TX_TOTAL_BUFSIZE]));
@@ -1311,7 +1311,7 @@ int a1_eth_initialize(bd_t *bis)
 	clk_set_rate(MAC0PTPCDR, 50000000);
 
 	char *ethmii = getenv("eth0mii");
-	printf("gmac debug: eth0mii = %s\n", ethmii);
+	printf("gmac:  eth0mii = %s\n", ethmii);
 	if(ethmii != NULL){
 		if(!strcmp(ethmii,"rmii")){
 			clk_set_rate(MAC0PHY, A1_MAC0PHY_RMII0_MACCDR);
@@ -1329,7 +1329,7 @@ int a1_eth_initialize(bd_t *bis)
 		}
 	}
 	else{
-		printf("gmac debug: eth0mii env not set,default use rmii,set 50Mhz\n");
+		printf("gmac  : eth0mii env not set,default use rmii,set 50Mhz\n");
 		dev->mii = GMAC_PHY_RMII;
 		clk_set_rate(MAC0PHY, A1_CPM_MACCDR_50MHZ);
 	}
