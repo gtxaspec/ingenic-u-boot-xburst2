@@ -35,15 +35,10 @@ pick_a_soc() {
 	eval `resize`
 	soc=$(whiptail --title "U-Boot SoC selection" \
 		--menu "Choose a SoC model" $size \
-		"isvp_a1_all_sfc0nor"		"Ingenic A1 ALL NOR"		\
 		"isvp_a1_all_lzma_sfc0nor"	"Ingenic A1 ALL LZMA NOR"		\
-		"isvp_a1_all_sfc0nand"		"Ingenic A1 ALL NAND"		\
+		"isvp_a1_all_sfc0nor"		"Ingenic A1 ALL NOR"		\
+		"isvp_a1_all_sfc0nand"		"Ingenic A1 ALL SFC0 NAND"		\
 		"isvp_a1_all_msc0"		"Ingenic A1 ALL MSC"		\
-		"isvp_a1_nt_sfc0nor"		"Ingenic A1NT SFC0 NOR"		\
-		"isvp_a1_nt_lzma_sfc0nor"	"Ingenic A1NT SFC0 NOR LZMA"		\
-		"isvp_a1_nt_sfc01nand"		"Ingenic A1NT SFC0 NAND"		\
-		"isvp_a1_nt_sfc1nand"		"Ingenic A1NT SFC1 NAND"		\
-		"isvp_a1_nt_msc0"		"Ingenic A1NT MSC0"		\
 		--notags 3>&1 1>&2 2>&3)
 }
 
