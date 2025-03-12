@@ -122,7 +122,7 @@ typedef volatile unsigned char	vu_char;
 #define _DEBUG	0
 #endif
 
-#define DEBUG_UBOOT
+/* #define DEBUG_UBOOT */
 /*
  * Output a debug text when condition "cond" is met. The "cond" should be
  * computed by a preprocessor in the best case, allowing for the best
