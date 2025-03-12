@@ -103,12 +103,7 @@ int ready_for_jump(unsigned char* data_buf, unsigned int data_size)
 	static u32      *param_addr = 0;
 	static u8       *tmpbuf = 0;
 #ifndef CONFIG_BURNER
-#ifdef CONFIG_A1ALL
-	static u8       cmdline[256];
-	memcpy(cmdline, pddr_params->config_bootargs, sizeof(pddr_params->config_bootargs));
-#else
 	static u8       cmdline[256] = CONFIG_BOOTARGS;
-#endif
 #else
 	static u8       cmdline[256] = {0,};
 #endif

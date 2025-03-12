@@ -1263,7 +1263,7 @@ static void src_file_create(char *postfix, struct ddr_params *p, struct ddrc_reg
 	fprintf(fp, ".config_ddr_chip_out_val_rtt_nom_2 =0x%08x,\n", CONFIG_DDR_CHIP_ODT_VAL_RTT_NOM_2);
 	fprintf(fp, ".config_ddr_driver_out_strength_1 =0x%08x,\n", CONFIG_DDR_DRIVER_OUT_STRENGTH_1);
 	fprintf(fp, ".config_ddr_driver_out_strength_0 =0x%08x,\n", CONFIG_DDR_DRIVER_OUT_STRENGTH_0);
-	fprintf(fp, ".config_bootargs =\"%s\",\n", CONFIG_BOOTARGS);
+/*	fprintf(fp, ".config_bootargs =\"%s\",\n", CONFIG_BOOTARGS);*/
 	fprintf(fp, ".config_sys_cpccr_sel =0x%08x,\n", CONFIG_SYS_CPCCR_SEL);
 	fprintf(fp, ".config_sys_ahb1cpccr_sel =0x%08x,\n", CONFIG_SYS_AHB1CPCCR_SEL);
 	fprintf(fp, ".array = %s_REMMAP_ARRAY,\n", postfix);

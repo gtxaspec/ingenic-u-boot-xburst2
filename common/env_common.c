@@ -182,6 +182,7 @@ void set_default_env(const char *s)
 			sizeof(default_environment), '\0', flags, 0,
 			0, NULL) == 0)
 		error("Environment import failed: errno = %d\n", errno);
+#if 0 /* Disable import of BOOTASRGS from efuse? */
 #ifdef CONFIG_A1ALL
 extern struct a1_ddr_params *pddr_params;
 	ENTRY e, *rv;
@@ -191,7 +192,7 @@ extern struct a1_ddr_params *pddr_params;
 		error("Environment bootargs import failed: errno = %d\n", errno);
 	}
 #endif
-
+#endif
 	gd->flags |= GD_FLG_ENV_READY;
 }
 
