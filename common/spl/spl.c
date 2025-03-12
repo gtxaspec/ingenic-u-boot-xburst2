@@ -286,7 +286,7 @@ void preloader_console_init(void)
 	gd->have_console = 1;
 
 #ifndef CONFIG_FAST_BOOT
-	puts("\n\n\nU-Boot SPL " PLAIN_VERSION " (" U_BOOT_DATE " - " \
+        puts("\n\nThingino U-Boot for Ingenic " SOC_VAR " SPL " PLAIN_VERSION " (" U_BOOT_DATE " - " \
 			U_BOOT_TIME ")\n");
 #endif
 
