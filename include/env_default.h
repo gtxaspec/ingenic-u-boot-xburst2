@@ -94,10 +94,6 @@ const uchar default_environment[] = {
 	"ethprime="	CONFIG_ETHPRIME			"\0"
 #endif
 
-#ifdef	CONFIG_ETHROTATE
-	"ethrotate="	CONFIG_ETHROTATE		"\0"
-#endif
-
 #ifdef	CONFIG_IPADDR
 	"ipaddr="	__stringify(CONFIG_IPADDR)	"\0"
 #endif

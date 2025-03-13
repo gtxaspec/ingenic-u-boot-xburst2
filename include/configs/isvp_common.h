@@ -774,12 +774,16 @@ kgd parameters are extracted from ddr3_param_t.*/
 #define CONFIG_CMD_TFTPSRV
 #define CONFIG_PHYLIB
 
-/* DUAL GIGA ETH START */
+/**
+ * Enable Dual Interfaces
+ */
+/*
 #define CONFIG_JZ_NET_ETHERNET_DUAL
 #define CONFIG_PHY_GIGE
+*/
+
 #define GMAC_PHY_RMII	2
 #define GMAC_PHY_RGMII	4
-/* DUAL GIGA ETH END */
 
 /* DEBUG ETHERNET */
 #define CONFIG_NETMASK			255.255.255.0
@@ -788,15 +792,10 @@ kgd parameters are extracted from ddr3_param_t.*/
 #define CONFIG_IPADDR			192.168.1.10
 #define CONFIG_RANDOM_MACADDR
 
-/* #define CONFIG_ETHADDR          00:11:22:56:96:69
-#define CONFIG_ETH1ADDR         00:11:22:56:96:70 */
-
-
 #define CONFIG_ETH0PHYADDR      (0)
 #define CONFIG_ETH1PHYADDR      (0)
 
 #define CONFIG_ETHPRIME         "mii0"
-#define CONFIG_ETHROTATE        "no"
 
 #define A1_GMAC0_PORTS_GROUP GPIO_PORT_A
 #define A1_GMAC0_PORT_PINS (0x7fff)
