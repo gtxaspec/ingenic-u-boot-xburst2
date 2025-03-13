@@ -37,7 +37,7 @@
 #define A1X "A1X"
 #define A1L "A1L"
 #define A1A "A1A"
-#define A1ALL "A1"
+#define A1ALL "A1ALL"
 
 
 #if defined(CONFIG_A1N)
