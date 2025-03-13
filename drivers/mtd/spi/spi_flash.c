@@ -508,12 +508,13 @@ struct spi_flash *spi_flash_probe(unsigned int bus, unsigned int cs,
 
 #ifndef CONFIG_BURNER
 #ifndef CONFIG_FAST_BOOT
-    printf("SF: Detected %s, manufacturer id: %02x\n", flash->name, *idp);
+        printf("SF:    Detected %s %dMB (%02x %02x %02x %02x %02x)",
+           flash->name, flash->size/1024/1024, idcode[0], idcode[1], idcode[2], idcode[3], idcode[4]);
 #endif
 #endif
 
 #ifdef DEBUG
-	printf("SF: Detected %s with page size ", flash->name);
+	printf("SF:   Detected %s with page size ", flash->name);
 	print_size(flash->sector_size, ", total ");
 	print_size(flash->size, "");
 #endif
