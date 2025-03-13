@@ -98,7 +98,7 @@ static int init_func_ram(void)
 
 static int display_banner(void)
 {
-	//printf("\n\n%s\n\n", version_string);
+	printf("\n\n%s\n\n", version_string);
 	return 0;
 }
 
@@ -313,7 +313,7 @@ void board_init_r(gd_t *id, ulong dest_addr)
 	gd->flags |= GD_FLG_RELOC;	/* tell others: relocation done */
 
 #ifndef CONFIG_FAST_BOOT
-	printf("Now running in RAM - U-Boot at: %08lx\n", dest_addr);
+	printf("Now running in RAM - U-Boot at: %08lx\n\n", dest_addr);
 #endif
 
 #ifdef CONFIG_A1ALL

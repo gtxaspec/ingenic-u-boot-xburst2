@@ -149,13 +149,14 @@ int spl_start_uboot(void)
 int checkboard(void)
 {
 #ifndef CONFIG_FAST_BOOT
-        char output[100];
-        puts("Platform: ISVP (Ingenic XBurst@II)\n");
-        sprintf(output, "Built profile: %s\n", SOC_VAR);
-        puts(output);
+	char output[100];
+	puts("Architecture: XBurst@II\n");
+	puts("Platform: ISVP\n");
+	sprintf(output, "Built profile: %s\n", SOC_VAR);
+	puts(output);
 
-        debug_socinfo = 0;
-        do_socinfo(NULL, 0, 0, NULL);
+	debug_socinfo = 0;
+	do_socinfo(NULL, 0, 0, NULL);
 #endif
 	return 0;
 }
