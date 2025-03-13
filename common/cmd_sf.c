@@ -275,7 +275,7 @@ static int do_spi_flash_read_write(int argc, char * const argv[])
 		else
 			ret = spi_flash_write(flash, offset, len, buf);
 
-		printf("SF: %zu bytes @ %#x %s: %s\n", (size_t)len, (u32)offset,
+                printf("SF:    %zu bytes @ %#x %s: %s\n", (size_t)len, (u32)offset,
 			read ? "Read" : "Written", ret ? "ERROR" : "OK");
 	}
 
