@@ -78,8 +78,9 @@ static void generate_or_set_mac_address(const char *var_name, const char *iface_
 void ethaddr_init(void) {
 	#ifdef CONFIG_RANDOM_MACADDR
 		generate_or_set_mac_address("ethaddr", "ETH", false); // No increment
+#ifdef CONFIG_JZ_NET_ETHERNET_DUAL
 		generate_or_set_mac_address("eth1addr", "ETH", true); // Increment by 1
-		
+#endif
 		// Generate wlan_mac with base MAC
 		uint8_t addr[6];
 		if (!eth_getenv_enetaddr("ethaddr", addr)) {
@@ -87,11 +88,13 @@ void ethaddr_init(void) {
 			generate_or_set_mac_address("ethaddr", "ETH", false);
 			eth_getenv_enetaddr("ethaddr", addr);
 		}
-		
-		// Increment twice for wlan_mac
+
+#ifdef CONFIG_JZ_NET_ETHERNET_DUAL
+		// Increment twice for wlan_mac when dual
 		increment_mac_address(addr);
+#endif
 		increment_mac_address(addr);
-		
+
 		// Set wlan_mac
 		if (eth_setenv_enetaddr("wlan_mac", addr)) {
 			printf("Net:   Failed to set address for WLAN\n");

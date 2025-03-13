@@ -86,8 +86,11 @@ const uchar default_environment[] = {
 #ifdef CONFIG_ETH0MII
 	"eth0mii="	CONFIG_ETH0MII			"\0"
 #endif
+
+#ifdef CONFIG_JZ_NET_ETHERNET_DUAL
 #ifdef CONFIG_ETH1MII
 	"eth1mii="	CONFIG_ETH1MII			"\0"
+#endif
 #endif
 
 #ifdef	CONFIG_ETHPRIME
