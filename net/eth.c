@@ -314,16 +314,17 @@ int eth_initialize(bd_t *bis)
 
 		bootstage_mark(BOOTSTAGE_ID_NET_ETH_INIT);
 		do {
+#ifdef CONFIG_JZ_NET_ETHERNET_DUAL
 			if (dev->index)
-				puts(", ");
+				puts("\n");
 
 			printf("Net:   %s", dev->name);
 
 			if (ethprime && strcmp(dev->name, ethprime) == 0) {
 				eth_current = dev;
-				puts(" [PRIME]");
+				puts(" [primary]");
 			}
-
+#endif
 			if (strchr(dev->name, ' '))
 				puts("\nWarning: eth device name has a space!"
 					"\n");
@@ -336,7 +337,9 @@ int eth_initialize(bd_t *bis)
 		} while (dev != eth_devices);
 
 		eth_current_changed();
+#ifdef CONFIG_JZ_NET_ETHERNET_DUAL
 		putc('\n');
+#endif
 	}
 
 	return num_devices;
