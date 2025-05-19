@@ -693,9 +693,9 @@
 #define CONFIG_CMD_L2CACHE	/* allcate l2cache support */
 /* #define CONFIG_CMD_NAND_FEATURES */		/* nand flash features operations CMD */
 /* #define CONFIG_CMD_I2C */
-/*#define CONFIG_CMD_SDSTART
+/*#define CONFIG_CMD_SDSTART */
 #define CONFIG_AUTO_UPDATE
-#define CONFIG_CMD_SDUPDATE*/
+#define CONFIG_CMD_SDUPDATE
 #define CONFIG_CMD_SOC_INFO
 #define CONFIG_CMD_ETHADDR
 #define CONFIG_CMD_FACTORY
