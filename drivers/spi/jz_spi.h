@@ -32,6 +32,17 @@
 #define FIFI_THRESHOLD			64
 #define SPI_WRITE_CHECK_TIMES		50
 
+#define SIZE_256B       256
+#define SIZE_4KB       4096
+#define SIZE_8KB       8192
+#define SIZE_16KB     16384
+#define SIZE_32KB     32768
+#define SIZE_64KB     65536
+#define SIZE_8MB    8388608
+#define SIZE_16MB  16777216
+#define SIZE_32MB  33554432
+#define SIZE_64MB  67108864
+
 struct spi_nor_block_info {
 	u32 blocksize;
 	u8 cmd_blockerase;
@@ -271,10 +282,10 @@ static struct jz_spi_support jz_spi_support_table[] = {
 	{
 		.name           = "GD25Q128C",
 		.id_manufactory = 0xc84018,
-		.page_size       = 256,
-		.sector_size      = (64 * 1024),
+		.page_size       = SIZE_256B,
+		.sector_size      = SIZE_4KB,
 		.addr_size = 3,
-		.size           = (16 * 1024 * 1024),
+		.size           = SIZE_16MB,
 		.quad_mode = {
 			.dummy_byte = 8,
 			.RDSR_CMD = CMD_RDSR_1,
