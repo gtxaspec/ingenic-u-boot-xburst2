@@ -766,12 +766,6 @@ kgd parameters are extracted from ddr3_param_t.*/
 #define CONFIG_XGMAC
 #define CONFIG_MII
 #define CONFIG_CMD_MII
-#define CONFIG_CMD_PING
-#ifdef CONFIG_SFC_NOR
-#define CONFIG_CMD_TFTPDOWNLOAD
-#endif
-#define CONFIG_CMD_TFTPPUT
-#define CONFIG_CMD_TFTPSRV
 #define CONFIG_PHYLIB
 
 /**
@@ -907,6 +901,31 @@ if use rmii 100Mbps net card,must define A1_MACxPHY_RMIIx_MACCDR.
 #define CONFIG_CMD_BOOTD
 #define CONFIG_CMD_CONSOLE
 #define CONFIG_CMD_DHCP
+#define CONFIG_CMD_ECHO
+#define CONFIG_CMD_ENV_CALLBACK /* needed for env on t40 */
+#define CONFIG_CMD_FAT
+#define CONFIG_FAT_WRITE
+#define CONFIG_CMD_FS_GENERIC
+#define CONFIG_CMD_GETTIME
+#define CONFIG_CMD_GPIO
+/*#define CONFIG_CMD_JFFS2 holds up boot??? */
+#define CONFIG_CMD_LOADB
+#define CONFIG_CMD_LOADS
+#define CONFIG_CMD_MEMORY
+#define CONFIG_CMD_MISC
+#define CONFIG_CMD_MMC
+#define CONFIG_CMD_NET
+#define CONFIG_CMD_PING
+#define CONFIG_CMD_RUN
+#define CONFIG_CMD_SAVEENV
+#define CONFIG_CMD_SOURCE
+#define CONFIG_CMD_WATCHDOG
+#define CONFIG_CMD_L2CACHE	/* allcate l2cache support */
+/* #define CONFIG_CMD_NAND_FEATURES */		/* nand flash features operations CMD */
+/* #define CONFIG_CMD_I2C */
+#define CONFIG_CMD_SDSTART
+#define CONFIG_AUTO_UPDATE
+#define CONFIG_CMD_SDUPDATE
 #define CONFIG_CMD_SOC_INFO
 #define CONFIG_CMD_ETHADDR
 #define CONFIG_CMD_FACTORY
@@ -915,29 +934,14 @@ if use rmii 100Mbps net card,must define A1_MACxPHY_RMIIx_MACCDR.
 #define CONFIG_CMD_EXT2
 #define CONFIG_CMD_EXT4
 #define CONFIG_CMD_NFS
-#define CONFIG_CMD_GPIO
-#define CONFIG_FAT_WRITE
-
-#define CONFIG_CMD_WATCHDOG	/* watchdog support */
-#define CONFIG_CMD_BOOTD	/* bootd			*/
-#define CONFIG_CMD_SAVEENV	/* saveenv			*/
-#define CONFIG_CMD_CONSOLE	/* coninfo			*/
-#define CONFIG_CMD_ECHO		/* echo arguments		*/
-#define CONFIG_CMD_FAT		/* FAT support			*/
-#define CONFIG_CMD_L2CACHE	/* allcate l2cache support */
+#define CONFIG_CMD_TFTPDOWNLOAD
+#define CONFIG_CMD_TFTPPUT
+#define CONFIG_CMD_TFTPSRV
+#define CONFIG_CMD_USB
 #define CONFIG_CMD_EPC		/*  show epc support */
-/*#define CONFIG_CMD_JFFS2*/	/* JFFS2 support        */
-#define CONFIG_CMD_LOADB	/* loadb			*/
-#define CONFIG_CMD_LOADS	/* loads			*/
-#define CONFIG_CMD_MEMORY	/* md mm nm mw cp cmp crc base loop mtest */
-#define CONFIG_CMD_MISC		/* Misc functions like sleep etc*/
-#define CONFIG_CMD_MMC		/* MMC/SD support			*/
-#define CONFIG_CMD_RUN		/* run command in env variable	*/
-#define CONFIG_CMD_SOURCE	/* "source" command support	*/
-#define CONFIG_CMD_GETTIME
+
 #define CONFIG_UBOOT_LOGO
 /* #define CONFIG_CMD_I2C */
-/* #define CONFIG_AUTO_UPDATE */
 #ifdef CONFIG_UBOOT_LOGO
 #define CONFIG_JPEG
 #define CONFIG_HW_DECODE
@@ -948,11 +952,8 @@ if use rmii 100Mbps net card,must define A1_MACxPHY_RMIIx_MACCDR.
 #define CONFIG_CMD_VDEC
 #endif
 
-#define CONFIG_CMD_SDUPDATE
 /* #define CONFIG_CMD_NOR_FEATURES */ /* nor  flash features operations CMD */
 /* #define CONFIG_CMD_NAND_FEATURES */ /* nand flash features operations CMD */
-
-#define CONFIG_CMD_USB
 
 /************************ USB CONFIG ***************************/
 #ifdef CONFIG_CMD_USB
@@ -1000,12 +1001,12 @@ if use rmii 100Mbps net card,must define A1_MACxPHY_RMIIx_MACCDR.
 #define CONFIG_SYS_PBSIZE (CONFIG_SYS_CBSIZE + sizeof(CONFIG_SYS_PROMPT) + 16)
 
 #if defined(CONFIG_SFC_NAND) || defined(CONFIG_SFC_NAND_COMMAND)
-#define CONFIG_SYS_MONITOR_LEN      (500 * 1024)
+#define CONFIG_SYS_MONITOR_LEN      (600 * 1024)
 #else
 #ifdef CONFIG_OF_LIBFDT /* support device tree */
 #define CONFIG_SYS_MONITOR_LEN		(230 * 1024)
 #else
-#define CONFIG_SYS_MONITOR_LEN		(342 * 1024)
+#define CONFIG_SYS_MONITOR_LEN		(230 * 1024)
 #endif
 #endif /* CONFIG_SFC_NAND || CONFIG_SFC_NAND_COMMOD */
 #define CONFIG_SYS_MALLOC_LEN		(32 * 1024 * 1024)
@@ -1194,6 +1195,9 @@ ROOTFS_CONFIG \
 "baseaddr=0x80600000\0" \
 "panic_timeout=10\0" \
 "serialport=ttyS1\0" \
+"disable_eth=false\0" \
+"disable_sd=false\0" \
+"enable_updates=false\0" \
 "boot_complete=false\0" \
 "soc="CONFIG_SOC"\0" \
 CONFIG_EXTRA_SETTINGS \
@@ -1201,7 +1205,7 @@ CONFIG_GPIO_SETTINGS \
 CONFIG_GPIO_IRCUT_SETTINGS
 
 #define CONFIG_GPIO_IRCUT_SETTINGS \
-"gpio_ircut=52I 53I 49I 50I 57I 58I\0"
+"gpio_ircut=\0"
 
 #else
 
@@ -1216,7 +1220,7 @@ CONFIG_GPIO_IRCUT_SETTINGS
 "soc="CONFIG_SOC"\0" \
 CONFIG_EXTRA_SETTINGS \
 CONFIG_GPIO_SETTINGS \
-CONFIG_GPIO_IRCUT_SETTINGS  \
+CONFIG_GPIO_IRCUT_SETTINGS \
 CONFIG_DEVICE_ENV
 
 #define CONFIG_GPIO_IRCUT_SETTINGS \
@@ -1224,6 +1228,6 @@ CONFIG_DEVICE_ENV
 
 #define CONFIG_DEVICE_ENV \
 
-#endif
+#endif /* CONFIG_BOOTARGS_EXTERNAL */
 
 #endif /* __CONFIG_ISVP_COMMON_H__ */
