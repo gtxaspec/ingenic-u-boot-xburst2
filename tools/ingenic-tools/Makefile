@@ -176,7 +176,8 @@ clean:
 		$(obj)ddr_params_creator \
 		$(obj)sfc_nand_params \
 		$(TOPDIR)/tools/ingenic-tools/a1*.* \
-		$(obj)sfc_timing_params
+		$(obj)sfc_timing_params \
+		$(OBJTREE)/arch/mips/cpu/xburst2/ddr_reg_values_a1*
 
 distclean:	clean
 
