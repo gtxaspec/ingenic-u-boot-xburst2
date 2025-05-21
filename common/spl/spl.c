@@ -286,8 +286,13 @@ void preloader_console_init(void)
 	gd->have_console = 1;
 
 #ifndef CONFIG_FAST_BOOT
-        puts("\n\nThingino U-Boot for Ingenic " SOC_VAR " SPL " PLAIN_VERSION " (" U_BOOT_DATE " - " \
-			U_BOOT_TIME ")\n");
+	puts("\n\nThingino U-Boot for Ingenic " SOC_VAR
+#ifdef CONFIG_ENV_IS_IN_MMC
+	" MMC"
+#endif
+	" SPL " PLAIN_VERSION " (" U_BOOT_DATE " - " \
+	U_BOOT_TIME ")\n");
+#endif
 #endif
 
 #ifdef CONFIG_SPL_DISPLAY_PRINT
