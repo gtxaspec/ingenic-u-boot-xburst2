@@ -22,8 +22,8 @@
  * MA 02111-1307 USA
  */
 
- #ifndef __CONFIG_ISVP_COMMON_H__
- #define __CONFIG_ISVP_COMMON_H__
+#ifndef __CONFIG_ISVP_COMMON_H__
+#define __CONFIG_ISVP_COMMON_H__
 
 #if defined(__CONFIG_ISVP_T41_H__)
 #define CONFIG_T41
@@ -674,6 +674,7 @@
 #define CONFIG_CMD_CONSOLE
 #define CONFIG_CMD_DHCP
 #define CONFIG_CMD_ECHO
+#define CONFIG_CMD_ENV_CALLBACK /* needed for env on t40 */
 #define CONFIG_CMD_FAT
 #define CONFIG_CMD_FS_GENERIC
 #define CONFIG_CMD_GETTIME
@@ -701,10 +702,6 @@
 #define CONFIG_CMD_FACTORY
 #define CONFIG_CMD_JZNET
 #define CONFIG_CMD_SQUASH_PROBE
-
-/* these cause a hang when booting from MMC - until we fix MMC env, or probably because the binary size exceeds the sys_monitor_len size?*/
-#ifndef CONFIG_ENV_IS_IN_MMC
-#define CONFIG_SYS_HUSH_PARSER
 #define CONFIG_CMD_EXT2
 #define CONFIG_CMD_EXT4
 #define CONFIG_CMD_NFS
@@ -712,7 +709,6 @@
 #define CONFIG_CMD_TFTPPUT
 #define CONFIG_CMD_TFTPSRV
 #define CONFIG_CMD_USB
-#endif
 
 /*#define CONFIG_SPI_FLASH_BAR*/
 
@@ -722,7 +718,7 @@
 #define CONFIG_USB_DWC2_REG_ADDR 0x13500000
 #define CONFIG_USB_HOST_ETHER
 #define CONFIG_USB_ETHER_ASIX
-/* #define CONFIG_USB_STORAGE */
+#define CONFIG_USB_STORAGE
 #endif
 
 /************************ LCD CONFIG *************************/
@@ -816,12 +812,6 @@
  */
 #define CONFIG_DOS_PARTITION
 
-#define CONFIG_SPL_LZOP
-
-#if defined(CONFIG_SPL_LZOP)
-#define CONFIG_DECMP_BUFFER_ADRS	0x80200000
-#endif
-
 #define CONFIG_LZO
 #define CONFIG_RBTREE
 #define CONFIG_LZMA
@@ -836,20 +826,20 @@
 
 #define CONFIG_BOOTP_MASK	(CONFIG_BOOTP_DEFAUL)
 
-#define CONFIG_SYS_MAXARGS 16
+#define CONFIG_SYS_MAXARGS 32
 #define CONFIG_SYS_LONGHELP
 #define CONFIG_SYS_PROMPT CONFIG_SYS_BOARD "# "
-#define CONFIG_SYS_CBSIZE 1024 /* Console I/O Buffer Size */
+#define CONFIG_SYS_CBSIZE 2048 /* Console I/O Buffer Size */
 #define CONFIG_SYS_PBSIZE (CONFIG_SYS_CBSIZE + sizeof(CONFIG_SYS_PROMPT) + 16)
 
 #if defined(CONFIG_SFC_NAND) || defined(CONFIG_SFC_NAND_COMMAND)
-#define CONFIG_SYS_MONITOR_LEN      (400 * 1024)
-#else
-#ifdef CONFIG_OF_LIBFDT /* support device tree */
+#define CONFIG_SYS_MONITOR_LEN      (600 * 1024)
+#elif defined(CONFIG_OF_LIBFDT) /* support device tree */
 #define CONFIG_SYS_MONITOR_LEN		(230 * 1024)
+#elif defined(CONFIG_ENV_IS_IN_MMC)
+#define CONFIG_SYS_MONITOR_LEN		(320 * 1024)
 #else
-#define CONFIG_SYS_MONITOR_LEN		(214 * 1024)
-#endif
+#define CONFIG_SYS_MONITOR_LEN		(230 * 1024)
 #endif /* CONFIG_SFC_NAND || CONFIG_SFC_NAND_COMMOD */
 
 #define CONFIG_SYS_MALLOC_LEN		(32 * 1024 * 1024)
@@ -881,6 +871,15 @@
  * SPL configuration
  */
 #define CONFIG_SPL_FRAMEWORK
+
+/* doesn't work in MMC yet? test again */
+#ifndef CONFIG_ENV_IS_IN_MMC
+#define CONFIG_SPL_LZOP
+#endif
+
+#if defined(CONFIG_SPL_LZOP)
+#define CONFIG_DECMP_BUFFER_ADRS	0x80200000
+#endif
 
 #define CONFIG_SPL_NO_CPU_SUPPORT_CODE
 #define CONFIG_SPL_START_S_PATH		"$(CPUDIR)/$(SOC)"
@@ -1048,6 +1047,9 @@ ROOTFS_CONFIG \
 "baseaddr=0x80600000\0" \
 "panic_timeout=10\0" \
 "serialport=ttyS1\0" \
+"disable_eth=false\0" \
+"disable_sd=false\0" \
+"enable_updates=false\0" \
 "boot_complete=false\0" \
 "soc="CONFIG_SOC"\0" \
 CONFIG_EXTRA_SETTINGS \
@@ -1055,7 +1057,7 @@ CONFIG_GPIO_SETTINGS \
 CONFIG_GPIO_IRCUT_SETTINGS
 
 #define CONFIG_GPIO_IRCUT_SETTINGS \
-"gpio_ircut=52I 53I 49I 50I 57I 58I\0"
+"gpio_ircut=\0"
 
 #else
 
@@ -1066,9 +1068,6 @@ CONFIG_GPIO_IRCUT_SETTINGS
 "baseaddr=0x80600000\0" \
 "panic_timeout=10\0" \
 "serialport=ttyS1\0" \
-"disable_eth=false\0" \
-"disable_sd=false\0" \
-"enable_updates=false\0" \
 "boot_complete=false\0" \
 "soc="CONFIG_SOC"\0" \
 CONFIG_EXTRA_SETTINGS \
@@ -1077,10 +1076,10 @@ CONFIG_GPIO_IRCUT_SETTINGS \
 CONFIG_DEVICE_ENV
 
 #define CONFIG_GPIO_IRCUT_SETTINGS \
-"gpio_ircut=52I 53I 49I 50I 57I 58I\0"
+"gpio_ircut=\0"
 
 #define CONFIG_DEVICE_ENV \
 
-#endif
+#endif /* CONFIG_BOOTARGS_EXTERNAL */
 
-#endif /* __CONFIG_ISVP_T41_H__ */
+#endif /* __CONFIG_ISVP_COMMON_H__ */
