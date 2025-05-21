@@ -676,6 +676,7 @@
 #define CONFIG_CMD_ECHO
 #define CONFIG_CMD_ENV_CALLBACK /* needed for env on t40 */
 #define CONFIG_CMD_FAT
+#define CONFIG_FAT_WRITE
 #define CONFIG_CMD_FS_GENERIC
 #define CONFIG_CMD_GETTIME
 #define CONFIG_CMD_GPIO
