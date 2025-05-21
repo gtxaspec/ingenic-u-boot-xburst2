@@ -661,22 +661,14 @@
 #define CONFIG_CMD_ETHADDR
 #define CONFIG_CMD_FACTORY
 #define CONFIG_CMD_JZNET
-
-/* these cause a hang when booting from MMC - until we fix MMC env*/
-#ifndef CONFIG_ENV_IS_IN_MMC
 #define CONFIG_CMD_SQUASH_PROBE
 #define CONFIG_CMD_EXT2
 #define CONFIG_CMD_EXT4
 #define CONFIG_CMD_NFS
-
-#ifndef CONFIG_SFC_NAND
 #define CONFIG_CMD_TFTPDOWNLOAD
-#endif
-
 #define CONFIG_CMD_TFTPPUT
 #define CONFIG_CMD_TFTPSRV
 #define CONFIG_CMD_USB
-#endif
 
 /************************ USB CONFIG ***************************/
 #if defined(CONFIG_CMD_USB)
@@ -790,13 +782,14 @@
 
 #if defined(CONFIG_SFC_NAND) || defined(CONFIG_SFC_NAND_COMMAND)
 #define CONFIG_SYS_MONITOR_LEN      (600 * 1024)
-#else
-#ifdef CONFIG_OF_LIBFDT /* support device tree */
+#elif defined(CONFIG_OF_LIBFDT) /* support device tree */
 #define CONFIG_SYS_MONITOR_LEN		(230 * 1024)
+#elif defined(CONFIG_ENV_IS_IN_MMC)
+#define CONFIG_SYS_MONITOR_LEN		(320 * 1024)
 #else
 #define CONFIG_SYS_MONITOR_LEN		(230 * 1024)
-#endif
 #endif /* CONFIG_SFC_NAND || CONFIG_SFC_NAND_COMMOD */
+
 #define CONFIG_SYS_MALLOC_LEN		(32 * 1024 * 1024)
 #define CONFIG_SYS_BOOTPARAMS_LEN	(128 * 1024)
 
@@ -1000,7 +993,7 @@ CONFIG_GPIO_IRCUT_SETTINGS
 "soc="CONFIG_SOC"\0" \
 CONFIG_EXTRA_SETTINGS \
 CONFIG_GPIO_SETTINGS \
-CONFIG_GPIO_IRCUT_SETTINGS  \
+CONFIG_GPIO_IRCUT_SETTINGS \
 CONFIG_DEVICE_ENV
 
 #define CONFIG_GPIO_IRCUT_SETTINGS \
@@ -1008,6 +1001,6 @@ CONFIG_DEVICE_ENV
 
 #define CONFIG_DEVICE_ENV \
 
-#endif
+#endif /* CONFIG_BOOTARGS_EXTERNAL */
 
-#endif /*__CONFIG_ISVP_COMMON__*/
+#endif /*__CONFIG_ISVP_COMMON_H__*/
