@@ -709,7 +709,9 @@ int jz_sfc_erase(unsigned char sfc_index,struct spi_flash *flash, u32 offset, si
 
 	jz_sfc_set_address_mode(sfc_index,flash,1);
 
-	if(len < 0x8000){
+	if(len < (size_t)erase_size) {
+		// use minimum erase size(4k) if len is smaller than predefined
+		// sector_size in jz_spi.h
 		erase_size = 0x1000;
 	}
 
@@ -777,7 +779,7 @@ int jz_sfc_erase(unsigned char sfc_index,struct spi_flash *flash, u32 offset, si
 		}
 
 		offset += erase_size;
-		len -= erase_size;
+		len = len > erase_size ? len - erase_size : 0;
 
 		if((erase_size != 0x1000 ) && (len  < erase_size)) {
 			erase_size = 0x1000;
