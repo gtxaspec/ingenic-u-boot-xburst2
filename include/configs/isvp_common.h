@@ -1225,7 +1225,9 @@ CONFIG_DEVICE_ENV
 #define CONFIG_GPIO_IRCUT_SETTINGS \
 "gpio_ircut=\0"
 
-#define CONFIG_DEVICE_ENV \
+#ifndef CONFIG_DEVICE_ENV
+#define CONFIG_DEVICE_ENV ""
+#endif
 
 #endif /* CONFIG_BOOTARGS_EXTERNAL */
 
