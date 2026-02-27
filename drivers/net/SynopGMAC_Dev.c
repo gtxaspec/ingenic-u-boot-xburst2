@@ -1464,7 +1464,7 @@ struct phy_list phy_lists[] = {
 static int check_phy_negotiation_status(synopGMACdevice *gmacdev)
 {
     int i;
-    struct phy_list * phy_list;
+    struct phy_list *phy_list = NULL;
     int status = 0;
     unsigned int phy_id_hi = 0, phy_id_low = 0, phy_id = 0;
     u16 data = 0;;
@@ -1478,18 +1478,17 @@ static int check_phy_negotiation_status(synopGMACdevice *gmacdev)
     printf("mac phy_id is: %x\n", phy_id);
 
     for(i = 0; i < ARRAY_SIZE(phy_lists); i++) {
-        phy_list = &phy_lists[i];
-        if(phy_list->oui_id == phy_id) {
+        if(phy_lists[i].oui_id == phy_id) {
+            phy_list = &phy_lists[i];
             break;
         }
     }
 
-    if((phy_list != NULL) && (phy_list->check_init != NULL)) {
+    if ((phy_list != NULL) && (phy_list->check_init != NULL)) {
         status = phy_list->check_init(gmacdev);
     } else {
-        printf("#### ERROR ###, need phy check_init.        \n  \
-            please implement phy check_init function .  \n  \
-            or check wheter your phy_type is in phy_lists[]\n");
+        printf("#### WARNING ### unknown PHY OUI 0x%x, using generic check.\n", phy_id);
+        status = check_phy_init_ds008(gmacdev);
     }
 
     return status;
