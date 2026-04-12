@@ -25,8 +25,7 @@
 #define CONFIG_GPIO_SETTINGS \
 "gpio_default=\0" \
 "gpio_default_net=\0"
-
-
+#define CONFIG_DEFAULT_DEVICE_TREE	marmot
 
 #if 0
 #ifdef CONFIG_FAST_BOOT

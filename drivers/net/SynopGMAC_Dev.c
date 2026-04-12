@@ -1295,6 +1295,50 @@ static int check_phy_init_ds008(synopGMACdevice *gmacdev)
 
 	return status;
 }
+
+static int check_phy_init_rtl8201f(synopGMACdevice *gmacdev)
+{
+    u16 data;
+    s32 status = -ESYNOPGMACNOERR;
+
+    printf("########### check_phy_init_rtl8201f #############\n");
+
+    /* Latch-low link bit; read twice to get current state. */
+    status = synopGMAC_read_phy_reg((u32 *)gmacdev->MacBase, gmacdev->PhyBase,
+                                    PHY_STATUS_REG, &data);
+    if (status)
+        return status;
+
+    status = synopGMAC_read_phy_reg((u32 *)gmacdev->MacBase, gmacdev->PhyBase,
+                                    PHY_STATUS_REG, &data);
+    if (status)
+        return status;
+
+    if ((data & Mii_Link) == 0) {
+        printf("No Link\n");
+        gmacdev->LinkState = LINKDOWN;
+        return -ESYNOPGMACPHYERR;
+    }
+
+    gmacdev->LinkState = LINKUP;
+    printf("Link UP\n");
+
+    /*
+     * RTL8201F compatible parts don't always expose usable
+     * speed/duplex state in vendor-specific status registers on this MAC,
+     * so derive it from BMCR as a conservative fallback.
+     */
+    status = synopGMAC_read_phy_reg((u32 *)gmacdev->MacBase, gmacdev->PhyBase,
+                                    PHY_CONTROL_REG, &data);
+    if (status)
+        return status;
+
+    gmacdev->Speed = (data & 0x2000) ? SPEED100 : SPEED10;
+    gmacdev->DuplexMode = (data & 0x0100) ? FULLDUPLEX : HALFDUPLEX;
+
+    return status;
+}
+
 static int check_phy_init_ip101g(synopGMACdevice *gmacdev)
 {
     u16 data;
@@ -1411,7 +1455,7 @@ struct phy_list phy_lists[] = {
     },
 	[2] = {
         .oui_id = 0x10937c,
-        .check_init = check_phy_init_ds008,
+        .check_init = check_phy_init_rtl8201f,
     },
 
 };
@@ -1420,7 +1464,7 @@ struct phy_list phy_lists[] = {
 static int check_phy_negotiation_status(synopGMACdevice *gmacdev)
 {
     int i;
-    struct phy_list * phy_list;
+    struct phy_list *phy_list = NULL;
     int status = 0;
     unsigned int phy_id_hi = 0, phy_id_low = 0, phy_id = 0;
     u16 data = 0;;
@@ -1434,18 +1478,17 @@ static int check_phy_negotiation_status(synopGMACdevice *gmacdev)
     printf("mac phy_id is: %x\n", phy_id);
 
     for(i = 0; i < ARRAY_SIZE(phy_lists); i++) {
-        phy_list = &phy_lists[i];
-        if(phy_list->oui_id == phy_id) {
+        if(phy_lists[i].oui_id == phy_id) {
+            phy_list = &phy_lists[i];
             break;
         }
     }
 
-    if((phy_list != NULL) && (phy_list->check_init != NULL)) {
+    if ((phy_list != NULL) && (phy_list->check_init != NULL)) {
         status = phy_list->check_init(gmacdev);
     } else {
-        printf("#### ERROR ###, need phy check_init.        \n  \
-            please implement phy check_init function .  \n  \
-            or check wheter your phy_type is in phy_lists[]\n");
+        printf("#### WARNING ### unknown PHY OUI 0x%x, using generic check.\n", phy_id);
+        status = check_phy_init_ds008(gmacdev);
     }
 
     return status;

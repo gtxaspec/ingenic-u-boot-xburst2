@@ -122,9 +122,19 @@ static struct phy_driver RTL8211B_driver = {
 	.shutdown = &genphy_shutdown,
 };
 
+static struct phy_driver JL1101_driver = {
+	.name = "JL1101/RTL8201F 10/100Mbps Ethernet",
+	.uid = 0x937c4020,
+	.mask = 0xfffffff0,
+	.features = PHY_BASIC_FEATURES,
+	.config = &genphy_config_aneg,
+	.startup = &genphy_startup,
+	.shutdown = &genphy_shutdown,
+};
+
 int phy_realtek_init(void)
 {
 	phy_register(&RTL8211B_driver);
-
+	phy_register(&JL1101_driver);
 	return 0;
 }
